@@ -21,4 +21,8 @@
         <item name="colorAccent">#1DA1F2</item>
         <item name="android:statusBarColor">#1DA1F2</item>
     </style>
+
+    <style name="Toolbar">
+        <item name="android:textColorSecondary">@color/twitterBlue</item>
+    </style>
 </resources>
