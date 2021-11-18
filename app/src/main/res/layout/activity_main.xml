@@ -1,24 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="?backgroundColor"
+    tools:context=".MainAcitivty">
 
-
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="?backgroundColor"
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imgLogin"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/splash_logo"
+            android:layout_gravity="center"
+            app:tint="@color/twitterBlue" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:id="@+id/rl_center_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_see_whats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_intro_text"
+            android:textColor="@color/colorBlack"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_create_account"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_launcher_background" />
-    </LinearLayout>
+            android:layout_below="@id/tv_see_whats"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/btn_round_blue"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/str_create_account"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="19sp" />
 
+    </RelativeLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/tv_have_account"
+            android:text="@string/str_have_account"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/tv_login"
+            android:textColor="@color/twitterBlue"
+            android:layout_toEndOf="@id/tv_have_account"
+            android:layout_marginStart="10dp"
+            android:text="@string/str_log_in"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
