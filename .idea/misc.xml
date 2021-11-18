@@ -3,11 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.23177083333333334" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/bg_gradient.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/splash_background.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/themes.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_splash_screen.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_splash_screen.xml" value="0.1" />
       </map>
     </option>
   </component>

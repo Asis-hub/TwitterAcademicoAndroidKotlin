@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val imgSplash = findViewById<ImageView>(R.id.imgSplash)
+        val imgLogin = findViewById<ImageView>(R.id.imgLogin)
         Glide.with(this)
-            .load("https://i.imgur.com/Q1mGsD3.png")
+            .load("https://hipertextual.com/wp-content/uploads/2012/06/twitter-bird-white-on-blue.jpg")
             .placeholder(R.drawable.ic_launcher_background)
             .error(R.drawable.ic_launcher_background)
-            .into(imgSplash)
+            .into(imgLogin)
     }
 }
