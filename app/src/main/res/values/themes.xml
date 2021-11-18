@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.TwitterAcademicoAndroidKotlin" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/twitterBlue</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -12,6 +12,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@color/colorWhitesmoke</item>
+        <item name="backgroundColor">@color/colorWhite</item>
+        <item name="colorAccent">@color/twitterBlue</item>
+        <item name="inverseColor">@color/colorBlack</item>
+        <item name="inverseColorLite">@color/colorgGainsboro</item>
+        <item name="layout_bottom_line_only">@drawable/layout_bottom_line_only</item>
+        <item name="layout_top_bottom_borders_only">@drawable/layout_top_bottom_borders_only</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?backgroundColor"
     tools:context=".HomeActivity">
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -22,9 +23,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:background="@color/white"
                 android:elevation="8dp"
                 android:minHeight="?attr/actionBarSize"
+                android:background="?backgroundColor"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
 
@@ -49,19 +50,19 @@
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_gravity="right"
-                    android:layout_marginEnd="20dp"
                     android:src="@drawable/ic_homesparkles"
-                    app:tint="@color/twitterBlue" />
+                    android:tint="@color/twitterBlue"
+                    android:layout_marginEnd="20dp"
+                    android:layout_gravity="right"/>
 
 
             </androidx.appcompat.widget.Toolbar>
 
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/tweets_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/tweets_refresh_layout"
                 android:layout_above="@id/bottom_navigation"
                 android:layout_below="@id/toolbar">
 
