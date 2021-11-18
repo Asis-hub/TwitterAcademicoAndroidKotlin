@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">TwitterAcademicoAndroidKotlin</string>
+    <string name="str_intro_text">Vea lo que está sucediendo en el mundo ahora mismo</string>
+    <string name="str_create_account">Crear una cuenta</string>
+    <string name="str_have_account">¿Ya tiene una cuenta?</string>
+    <string name="str_log_in">Entrar</string>
+    <string name="str_create_your_account">Cree su cuenta</string>
+    <string name="str_name">Nombre</string>
+    <string name="str_username">Usuario</string>
+    <string name="str_password">Contraseña</string>
+    <string name="str_create">Crear</string>
+    <string name="str_home">Inicio</string>
+
+    <string name="open">Abrir</string>
+    <string name="close">Cerrar</string>
+    <string name="str_log_in_to_twitter">Acceder a Twitter.</string>
 </resources>
