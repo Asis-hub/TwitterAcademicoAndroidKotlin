@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TwitterAcademicoAndroidKotlin">
         <activity
+            android:name=".CrearCuenta"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
