@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Create your account"
+            android:text="Crea tu cuenta"
             android:textColor="@color/colorBlack"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -65,7 +65,7 @@
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
+            android:hint="Nombre"
             android:minHeight="32dp"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Username"
+            android:hint="Nombre de usuario"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
 
@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Password"
+            android:hint="Contraseña"
             android:inputType="textPassword"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
@@ -109,7 +109,7 @@
             android:background="@drawable/btn_round_blue"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="Create"
+            android:text="Crear"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
             android:textSize="15sp" />
