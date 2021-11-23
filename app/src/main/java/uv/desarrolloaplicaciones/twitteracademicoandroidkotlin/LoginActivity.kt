@@ -16,5 +16,7 @@ class LoginActivity : AppCompatActivity() {
             val intento1 = Intent(this, CrearCuenta::class.java)
             startActivity(intento1)
         }
+
+
     }
 }
