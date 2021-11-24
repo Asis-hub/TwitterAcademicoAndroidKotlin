@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
     childColumns = arrayOf("idUsuario"),
     onDelete = CASCADE)
 ))
-data class Siguiedo (
+data class Siguiendo (
     @PrimaryKey
     var idUsuario: Int = 0,
     var idSeguidor: Int = 0,
