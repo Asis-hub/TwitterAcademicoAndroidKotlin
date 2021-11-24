@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uv.desarrolloaplicaciones.twitteracademicoandroidkotlin">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,8 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TwitterAcademicoAndroidKotlin">
         <activity
+            android:name=".CrearCuenta"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
-            android:exported="true" />
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true"
