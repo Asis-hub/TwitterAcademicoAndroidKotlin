@@ -7,6 +7,10 @@ plugins {
 android {
     compileSdk 31
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "uv.desarrolloaplicaciones.twitteracademicoandroidkotlin"
         minSdk 21
@@ -54,7 +58,7 @@ dependencies {
     //ROOM
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"
-    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
     //LifeCycleStyle
