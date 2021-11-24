@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         val btnCrearCuenta = findViewById<Button>(R.id.btnCrearCuenta)
         val tv_login = findViewById<TextView>(R.id.tv_login)
 
+
+
         btnCrearCuenta.setOnClickListener {
             val intento1 = Intent(this, CrearCuenta::class.java)
             startActivity(intento1)
