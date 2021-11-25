@@ -34,9 +34,13 @@
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/ic_twitter.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/layout_top_line_only.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/splash_background.xml" value="0.23541666666666666" />
+        <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_crear_cuenta.xml" value="0.38179347826086957" />
+        <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_create_tweet.xml" value="0.38179347826086957" />
+        <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_home.xml" value="0.38179347826086957" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_login.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_splash_screen.xml" value="0.22" />
+        <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/itemlayout_tweet.xml" value="0.5" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_crear_cuenta.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_home.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_login.xml" value="0.20416666666666666" />
