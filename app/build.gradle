@@ -56,14 +56,18 @@ dependencies {
     implementation 'com.facebook.fresco:fresco:2.6.0'
 
     //ROOM
-    // Extensions = ViewModel + LiveData
-    implementation "android.arch.lifecycle:extensions:1.1.0"
-    kapt "android.arch.lifecycle:compiler:1.1.0"
-// Room
-    implementation "android.arch.persistence.room:runtime:1.0.0"
-    kapt "android.arch.persistence.room:compiler:1.0.0"
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
 
     //LifeCycleStyle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+
+    implementation "androidx.activity:activity-ktx:1.4.0"
+    implementation "androidx.fragment:fragment-ktx:1.4.0"
+
+    implementation 'com.android.volley:volley:1.1.0'
+
 }
