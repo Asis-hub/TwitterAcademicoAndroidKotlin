@@ -18,6 +18,6 @@ data class UsuarioResponse(
     var nombreUsuario: String,
     @SerializedName("Password")
     var password: String,
-    @SerializedName("IdTipoUsuario")
+    @SerializedName("idTipoUsuario")
     var idTipoUsuario: Int
 )
