@@ -8,8 +8,8 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.DATA.TipoUsuar
 @Dao
 interface TipoUsuarioDAO {
     @Query("SELECT * FROM TipoUsuario")
-    suspend fun getTipoUsuario(): List<TipoUsuario>
+    fun getTipoUsuario(): List<TipoUsuario>
 
     @Insert
-    suspend fun insertTipoUsuario(tiposUsuario: List<TipoUsuario>)
+    fun insertTipoUsuario(tiposUsuario: List<TipoUsuario>)
 }

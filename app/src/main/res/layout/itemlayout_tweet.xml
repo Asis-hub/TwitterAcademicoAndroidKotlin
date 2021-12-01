@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:padding="20dp"
     android:background="?layout_bottom_line_only"
     android:layout_height="wrap_content">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <ImageView
         android:id="@+id/profile_photo"
         android:layout_width="53dp"
         android:layout_height="53dp"
         android:layout_marginEnd="20dp"
-        app:placeholderImage="@drawable/egg"
-        app:roundAsCircle="true" />
+        android:scaleType="fitCenter"
+        app:roundAsCircle="true"
+        tools:srcCompat="@drawable/egg" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -40,13 +42,31 @@
         android:id="@+id/tv_tweet_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="THIS IS A TWEET"
-        android:layout_toEndOf="@id/profile_photo"
         android:layout_below="@id/tv_name"
-        android:textStyle="normal"
         android:layout_marginTop="5dp"
+        android:layout_toEndOf="@id/profile_photo"
+        android:text="THIS IS A TWEET"
         android:textColor="?inverseColor"
-        android:textSize="15sp"/>
+        android:textSize="15sp"
+        android:textStyle="normal" />
+
+    <ImageView
+        android:id="@+id/imageview_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_tweet_text"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/profile_photo"
+        app:srcCompat="@drawable/ic_baseline_image_24" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="0dp"
+        app:srcCompat="@drawable/ic_more_vertical" />
 
     <TextView
         android:id="@+id/tv_tweet_edited"
@@ -63,46 +83,45 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_below="@id/tv_tweet_text"
-        android:layout_marginTop="25dp"
-        android:layout_toEndOf="@id/profile_photo"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageview_media"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/profile_photo">
 
         <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
             android:id="@+id/tweet_action_reply"
-            app:tint="?inverseColorLite"
-            android:src="@drawable/ic_twitter_comment" />
-
-        <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_toEndOf="@id/tweet_action_reply"
-            android:layout_marginStart="45dp"
+            android:src="@drawable/ic_twitter_comment"
+            app:tint="?inverseColorLite" />
+
+        <ImageView
             android:id="@+id/tweet_action_retweet"
-            app:tint="?inverseColorLite"
-            android:src="@drawable/ic_twitter_retweet" />
-
-        <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_toEndOf="@id/tweet_action_retweet"
             android:layout_marginStart="45dp"
+            android:layout_toEndOf="@id/tweet_action_reply"
+            android:src="@drawable/ic_twitter_retweet"
+            app:tint="?inverseColorLite" />
+
+        <ImageView
             android:id="@+id/tweet_action_like"
-            app:tint="?inverseColorLite"
-            android:src="@drawable/ic_twitter_like_outline" />
-
-        <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_toEndOf="@id/tweet_action_like"
             android:layout_marginStart="45dp"
-            android:id="@+id/tweet_action_edit"
-            android:visibility="gone"
-            app:tint="?inverseColorLite"
-            android:src="@drawable/ic_edit_tweet" />
+            android:layout_toEndOf="@id/tweet_action_retweet"
+            android:src="@drawable/ic_twitter_like_outline"
+            app:tint="?inverseColorLite" />
 
+        <ImageView
+            android:id="@+id/tweet_action_edit"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="45dp"
+            android:layout_toEndOf="@id/tweet_action_like"
+            android:src="@drawable/ic_edit_tweet"
+            android:visibility="gone"
+            app:tint="?inverseColorLite" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -63,6 +63,13 @@ dependencies {
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
+
     //LifeCycleStyle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+
+    implementation "androidx.activity:activity-ktx:1.4.0"
+    implementation "androidx.fragment:fragment-ktx:1.4.0"
+
+    implementation 'com.android.volley:volley:1.1.0'
+
 }
