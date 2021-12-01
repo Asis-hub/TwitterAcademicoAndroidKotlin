@@ -6,8 +6,8 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.DATA.Siguiendo
 
 interface SiguiedoDAO {
     @Insert
-    suspend fun insertSiguiendo(siguiendo: Siguiendo)
+    fun insertSiguiendo(siguiendo: Siguiendo)
 
     @Delete
-    suspend fun unfollow(siguiendo: Siguiendo)
+    fun unfollow(siguiendo: Siguiendo)
 }
