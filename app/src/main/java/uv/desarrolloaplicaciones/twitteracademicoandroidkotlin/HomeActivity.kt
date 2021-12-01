@@ -9,5 +9,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Fresco.initialize(this)
         setContentView(R.layout.activity_home)
+
+
     }
 }
