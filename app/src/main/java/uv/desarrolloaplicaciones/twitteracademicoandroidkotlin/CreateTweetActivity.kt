@@ -18,7 +18,7 @@ class CreateTweetActivity : AppCompatActivity() {
             .load("https://ibb.co/L6jFk1W")
             .placeholder(R.drawable.ic_launcher_background)
             .error(R.drawable.default_photo)
-            .into(binding.draweeUserPhoto)
+            .into(binding.imageviewUserPhoto)
         binding.btnCreateTweet.setOnClickListener{
             checkTweetLegth()
         }
