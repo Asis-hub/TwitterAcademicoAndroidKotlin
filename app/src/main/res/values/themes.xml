@@ -32,4 +32,12 @@
     <style name="Toolbar">
         <item name="android:textColorSecondary">@color/twitterBlue</item>
     </style>
+    <style name="Theme.TwitterAcademicoAndroidKotlin.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.TwitterAcademicoAndroidKotlin.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.TwitterAcademicoAndroidKotlin.PopupOverlay"
+        parent="ThemeOverlay.AppCompat.Light" />
 </resources>
