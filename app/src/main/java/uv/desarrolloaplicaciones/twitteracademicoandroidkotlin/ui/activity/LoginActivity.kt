@@ -31,8 +31,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        binding.btnLogin.setOnClickListener { validarUsuario("http://192.168.56.1:80/android_mysql/validar_usuario.php") }
+        binding.btnLogin.setOnClickListener { validarUsuario("http://192.168.100.4/android_mysql/validar_usuario.php") }
     }
 
     private fun validarUsuario(URL: String) {
@@ -41,9 +40,10 @@ class LoginActivity : AppCompatActivity() {
             Response.Listener { response ->
                 try {
                     if (!response.isEmpty()) {
+                        println(response)
                         //obteniendo los registros
                         val jsonRespuesta = JSONObject(response)
-                        println(jsonRespuesta.toString())
+                        println("la respuesta es: $jsonRespuesta")
 
                         //val nombre_usuario = jsonRespuesta.getString("Nombre")
 
@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     }
                 } catch (e: JSONException) {
-                    e.message
+                    println(e.message)
                 }
             },
             Response.ErrorListener { error ->

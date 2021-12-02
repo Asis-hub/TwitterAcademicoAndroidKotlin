@@ -1,7 +1,6 @@
-package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.Api
+package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class UsuarioResponse(
     @SerializedName("Nombre")
