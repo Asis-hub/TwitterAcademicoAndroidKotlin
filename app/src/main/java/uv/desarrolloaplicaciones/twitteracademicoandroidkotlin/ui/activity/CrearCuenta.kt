@@ -92,12 +92,6 @@ class CrearCuenta : AppCompatActivity() {
             .setNegativeButton("Cancel", dialogClickListener)
             .create()
             .show()
-
-        /*val newFragment = DatePickerFragment.newInstance{ _, year, month, day ->
-            val selectedDate = "$day / ${month + 1} / $year"
-            binding.etFecNac.setText(selectedDate)
-        }*/
-        //newFragment.show(supportFragmentManager, "datePicker")
     }
 
     private fun verificarCamposTextoVacios(): Boolean {
