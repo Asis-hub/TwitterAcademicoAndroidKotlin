@@ -1,11 +1,11 @@
-package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin
+package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
-import android.app.DatePickerDialog
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.Toast
-import com.google.gson.GsonBuilder
+import androidx.appcompat.app.AlertDialog
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.databinding.ActivityCrearCuentaBinding
 import java.util.*
 
@@ -32,16 +32,16 @@ class CrearCuenta : AppCompatActivity() {
             mostrarDialogoFecha()
         }
         binding.btnCreate.setOnClickListener {
-            var nombre: String = "nombre"
-            var apellidoPaterno: String = "apellidoPaterno"
-            var apellidoMaterno: String = "apellidoMaterno"
+            var nombre = "nombre"
+            var apellidoPaterno = "apellidoPaterno"
+            var apellidoMaterno = "apellidoMaterno"
             var fechaNacimiento: String = "${Calendar.getInstance().get(Calendar.YEAR)}-" +
                                         "${Calendar.getInstance().get(Calendar.MONTH)}-" +
-                                        "${Calendar.getInstance().get(Calendar.DAY_OF_WEEK)}"
-            var email: String = "email"
-            var nombreUsuario: String = "nombreusuario"
-            var password: String = "password"
-            var idTipoUsuario: Int = 1
+                                        "${Calendar.getInstance().get(Calendar.DAY_OF_MONTH)}"
+            var email = "email"
+            var nombreUsuario = "nombreusuario"
+            var password = "password"
+            var idTipoUsuario = 1
 
             if (verificarCamposTextoVacios()) {
                 nombre = binding.etName.text.toString()
@@ -69,12 +69,35 @@ class CrearCuenta : AppCompatActivity() {
     }
 
     private fun mostrarDialogoFecha() {
-        val newFragment = DatePickerFragment.newInstance(
-            DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                val selectedDate = "$day / ${month + 1} / $year"
-                binding.etFecNac.setText(selectedDate)
-            })
-        newFragment.show(supportFragmentManager, "datePicker")
+        //spinner date picker layout
+        val spinnerDatePicker = layoutInflater.inflate(R.layout.spinner_date_picker_layout, null) as DatePicker
+
+        val dialogClickListener = DialogInterface.OnClickListener { _, which ->
+            when (which) {
+                DialogInterface.BUTTON_POSITIVE -> {
+                    binding.etFecNac.setText("${spinnerDatePicker.dayOfMonth} / " +
+                            "${spinnerDatePicker.month + 1} / " +
+                            "${spinnerDatePicker.year}")
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+
+                }
+            }
+        }
+
+        val builder = AlertDialog.Builder(this!!)
+        builder.setTitle(resources.getString(R.string.fecNac))
+            .setView(spinnerDatePicker)
+            .setPositiveButton("Ok", dialogClickListener)
+            .setNegativeButton("Cancel", dialogClickListener)
+            .create()
+            .show()
+
+        /*val newFragment = DatePickerFragment.newInstance{ _, year, month, day ->
+            val selectedDate = "$day / ${month + 1} / $year"
+            binding.etFecNac.setText(selectedDate)
+        }*/
+        //newFragment.show(supportFragmentManager, "datePicker")
     }
 
     private fun verificarCamposTextoVacios(): Boolean {

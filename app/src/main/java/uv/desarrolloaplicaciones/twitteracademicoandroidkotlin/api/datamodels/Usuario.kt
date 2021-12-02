@@ -1,8 +1,8 @@
-package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api
+package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels
 
 import com.google.gson.annotations.SerializedName
 
-data class UsuarioResponse(
+data class Usuario(
     @SerializedName("Nombre")
     var nombre: String,
     @SerializedName("ApellidoPaterno")

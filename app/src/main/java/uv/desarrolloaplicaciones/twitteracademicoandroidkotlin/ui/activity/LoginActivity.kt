@@ -1,26 +1,15 @@
-package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin
+package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
 import android.content.Intent
-import android.database.sqlite.SQLiteException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.*
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.AppDatabase
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.DAO.UsuarioDAO
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.DATA.Usuario
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.databinding.ActivityLoginBinding
-import javax.xml.transform.ErrorListener
-import javax.xml.transform.TransformerException
 
 class LoginActivity : AppCompatActivity() {
 
