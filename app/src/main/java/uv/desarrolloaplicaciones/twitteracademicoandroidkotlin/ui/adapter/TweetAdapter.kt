@@ -1,16 +1,13 @@
-package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.adapter
+package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.facebook.drawee.generic.RoundingParams
-import com.facebook.drawee.view.SimpleDraweeView
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.DATA.Tweet
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 
