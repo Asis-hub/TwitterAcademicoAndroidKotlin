@@ -9,10 +9,10 @@ import retrofit2.http.POST
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 
 interface APIService {
+    @GET("Usuario")
+    suspend fun getUsuarios() : List<Usuario>
+
     @Headers("Content-Type: application/json")
     @POST("Usuario")
     suspend fun registrarUsuario(@Body nuevoUsuario: RequestBody): Response<Usuario>
-
-    @GET
-    suspend fun verificarUsuario()
 }
