@@ -1,9 +1,10 @@
-package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin
+package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.databinding.ActivityCreateTweetBinding
 
 class CreateTweetActivity : AppCompatActivity() {

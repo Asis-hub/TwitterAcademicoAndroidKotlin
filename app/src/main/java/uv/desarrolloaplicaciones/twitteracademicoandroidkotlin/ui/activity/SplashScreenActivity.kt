@@ -1,10 +1,8 @@
-package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin
+package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
-import android.widget.ImageView
-import com.bumptech.glide.Glide
 
 
 class SplashScreenActivity : AppCompatActivity() {

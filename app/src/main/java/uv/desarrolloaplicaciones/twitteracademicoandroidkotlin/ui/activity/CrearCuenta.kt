@@ -1,4 +1,4 @@
-package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin
+package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.AppDatabase
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.DAO.UsuarioDAO
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.DB.DATA.Usuario
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import java.util.*
 
 class CrearCuenta : AppCompatActivity() {

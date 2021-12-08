@@ -14,19 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TwitterAcademicoAndroidKotlin" >
         <activity
-            android:name=".PerfilUsuario"
+            android:name=".ui.activity.PerfilUsuario"
             android:exported="false" />
         <activity
-            android:name=".CrearCuenta"
+            android:name=".ui.activity.CrearCuenta"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".ui.activity.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".ui.activity.SplashScreenActivity"
             android:exported="true"
             android:theme="@style/SplashTheme" >
             <intent-filter>
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
