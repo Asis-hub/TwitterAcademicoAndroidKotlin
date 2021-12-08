@@ -35,13 +35,5 @@ class CrearCuenta : AppCompatActivity() {
                 Toast.makeText(this,"Debes llenar todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
-
-        val
-        CrearCuenta(Usuario, String url, int requestMethod){
-
-        }
-
-
-        
     }
 }
