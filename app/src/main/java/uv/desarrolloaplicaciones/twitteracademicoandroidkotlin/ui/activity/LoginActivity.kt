@@ -1,5 +1,6 @@
 package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -60,10 +61,10 @@ class LoginActivity : AppCompatActivity() {
                 val service = ServiceBuilder.buildService(APIService::class.java)
                 val response = service.logearse(requestBody)
                 runOnUiThread {
-                    if (response != null) {
+                    if (response.respuesta.isNullOrBlank()) {
                         mostrarMensaje("¡Bienvenido!")
                         irAPantallaPrincipal(response)
-                    } else {
+                    } else if(response.respuesta == "Favor de verificar su informacion"){
                         mostrarMensaje("No existe un usuario con ese usuario y/o contraseña")
                     }
                 }
@@ -77,9 +78,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun irAPantallaPrincipal(body: Usuario) {
         val intent = Intent(this, HomeActivity::class.java)
-        intent.putExtra("id",body!!.idUsuario)
-        intent.putExtra("nombre",body!!.nombre)
-        intent.putExtra("nombreUsuario", body!!.nombreUsuario)
+        
+        //Comparte algunos datos del usuario para usarlos en la siguiente activity (home)
+        val sharedPref = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+        var editor = sharedPref.edit()
+        editor.putInt("id", body.idUsuario)
+        editor.putString("nombre", body.nombre)
+        editor.putString("nombreUsuario", body.nombreUsuario)
+        editor.commit()
+
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
 

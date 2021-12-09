@@ -19,8 +19,8 @@ data class Usuario(
     var email: String,
     @SerializedName("NombreUsuario")
     var nombreUsuario: String,
-    @SerializedName("Password")
-    var password: String,
     @SerializedName("idTipoUsuario")
-    var idTipoUsuario: Int
+    var idTipoUsuario: Int,
+    @SerializedName("Respuesta")
+    var respuesta: String
 )
