@@ -4,11 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.android.volley.*
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import org.json.JSONException
-import org.json.JSONObject
+import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -20,57 +24,68 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnLogin.setOnClickListener { validarUsuario("http://192.168.100.4/android_mysql/validar_usuario.php") }
-    }
-
-    private fun validarUsuario(URL: String) {
-        val stringRequest: StringRequest = object : StringRequest(
-            Method.POST, URL,
-            Response.Listener { response ->
-                try {
-                    if (!response.isEmpty()) {
-                        println(response)
-                        //obteniendo los registros
-                        val jsonRespuesta = JSONObject(response)
-                        println("la respuesta es: $jsonRespuesta")
-
-                        //val nombre_usuario = jsonRespuesta.getString("Nombre")
-
-                        //abriendo el activiy de bienvenido
-                        val intent = Intent(this, HomeActivity::class.java)
-//                        intent.putExtra("usuario", nombre_usuario)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(
-                            this,
-                            "usuario o contraseña incorrectas",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } catch (e: JSONException) {
-                    println(e.message)
-                }
-            },
-            Response.ErrorListener { error ->
-                Toast.makeText(
-                    this,
-                    error.toString(),
-                    Toast.LENGTH_LONG
-                ).show()
-            }) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> {
-                val parametros: MutableMap<String, String> = HashMap()
-                println(binding.etUsername.text.toString())
-                println(binding.etPassword.text.toString())
-                parametros["username"] = binding.etUsername.text.toString()
-                parametros["password"] = binding.etPassword.text.toString()
-                return parametros
+        binding.btnLogin.setOnClickListener {
+            if(!camposVacios()) {
+                logearse(binding.etUsername.text.toString(), binding.etPassword.text.toString())
             }
         }
-        val requestQueue = Volley.newRequestQueue(this)
-        requestQueue.add(stringRequest)
     }
 
+    private fun camposVacios(): Boolean {
+        var camposVacios = false
 
+        if (binding.etUsername.text.isEmpty()) {
+            camposVacios = true
+            Toast.makeText(this,"Hay un campo de texto vacio",Toast.LENGTH_SHORT).show()
+        } else if (binding.etPassword.text.isEmpty()) {
+            camposVacios = true
+            Toast.makeText(this,"Hay un campo de texto vacio",Toast.LENGTH_SHORT).show()
+            //TODO cambiar el color del edittext
+            // binding.etPassword.sup
+        }
+
+        return camposVacios
+    }
+
+    private fun logearse(usuario: String, password: String) {
+        val json = JsonObject()
+        json.addProperty("NombreUsuario", usuario)
+        json.addProperty("Contraseña", password)
+
+        val jsonString = json.toString()
+        val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val response = service.logearse(requestBody)
+                runOnUiThread {
+                    if (response != null) {
+                        mostrarMensaje("¡Bienvenido!")
+                        irAPantallaPrincipal(response)
+                    } else {
+                        mostrarMensaje("No existe un usuario con ese usuario y/o contraseña")
+                    }
+                }
+            } catch (exception: Exception) {
+                println("Excepcion:")
+                mostrarMensaje("Hubo un problema de conexión, intenta más tarde")
+                exception.printStackTrace()
+            }
+        }
+    }
+
+    private fun irAPantallaPrincipal(body: Usuario) {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.putExtra("id",body!!.idUsuario)
+        intent.putExtra("nombre",body!!.nombre)
+        intent.putExtra("nombreUsuario", body!!.nombreUsuario)
+        startActivity(intent)
+    }
+
+    private fun mostrarMensaje(mensaje: String) {
+        runOnUiThread {
+            Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+        }
+    }
 }

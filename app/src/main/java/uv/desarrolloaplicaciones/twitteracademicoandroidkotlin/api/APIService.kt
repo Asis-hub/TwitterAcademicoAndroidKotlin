@@ -3,15 +3,13 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Mensaje
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 
 interface APIService {
     //USUARIOS
-    @GET("Usuario/{nombreUsuario}/{password}")
-    suspend fun logearse(@Path("nombreUsuario") nombreUsuario: String,
-                         @Path("password") password: String): Usuario
+    @POST("Login")
+    suspend fun logearse(@Body usuario: RequestBody): Usuario
 
     @GET("Usuario")
     suspend fun getUsuarios() : List<Usuario>
