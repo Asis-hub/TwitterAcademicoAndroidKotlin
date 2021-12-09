@@ -8,21 +8,27 @@
     android:background="?layout_bottom_line_only"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/profile_photo"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_profile_photo"
         android:layout_width="53dp"
         android:layout_height="53dp"
         android:layout_marginEnd="20dp"
-        android:scaleType="fitCenter"
-        app:roundAsCircle="true"
-        tools:srcCompat="@drawable/egg" />
+        app:cardCornerRadius="100dp">
+
+        <ImageView
+            android:id="@+id/profile_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@drawable/egg" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="NAME"
-        android:layout_toEndOf="@id/profile_photo"
+        android:layout_toEndOf="@id/card_profile_photo"
         android:textStyle="bold"
         android:textColor="?inverseColor"
         android:textSize="15sp"/>
@@ -44,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_name"
         android:layout_marginTop="5dp"
-        android:layout_toEndOf="@id/profile_photo"
+        android:layout_toEndOf="@id/card_profile_photo"
         android:text="THIS IS A TWEET"
         android:textColor="?inverseColor"
         android:textSize="15sp"
@@ -57,7 +63,7 @@
         android:layout_below="@+id/tv_tweet_text"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/profile_photo"
+        android:layout_toEndOf="@+id/card_profile_photo"
         app:srcCompat="@drawable/ic_baseline_image_24" />
 
     <ImageView
@@ -73,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="EDITED"
-        android:layout_toEndOf="@id/profile_photo"
+        android:layout_toEndOf="@id/card_profile_photo"
         android:layout_below="@id/tv_tweet_text"
         android:textStyle="normal"
         android:layout_marginTop="2dp"
@@ -86,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/imageview_media"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/profile_photo">
+        android:layout_toEndOf="@id/card_profile_photo">
 
         <ImageView
             android:id="@+id/tweet_action_reply"

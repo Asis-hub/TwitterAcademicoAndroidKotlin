@@ -29,13 +29,22 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
 
-                <ImageView
-                    android:id="@+id/imageview_user_photo"
+                <androidx.cardview.widget.CardView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    app:cardCornerRadius="100dp"
                     android:layout_gravity="left"
                     android:layout_marginEnd="20dp"
-                    android:src="@drawable/default_photo" />
+                    android:layout_marginTop="15dp">
+
+                    <ImageView
+                        android:id="@+id/imageview_user_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/default_photo" />
+                </androidx.cardview.widget.CardView>
+
 
                 <TextView
                     android:id="@+id/custom_title"
@@ -120,21 +129,29 @@
                         android:background="@android:color/transparent"
                         android:padding="10dp">
 
-                        <ImageView
-                            android:id="@+id/imageview_user_photo_nav"
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_iv_user_photo_nav"
                             android:layout_width="70dp"
                             android:layout_height="70dp"
+                            app:cardCornerRadius="100dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:src="@drawable/default_photo"/>
+                            android:layout_marginBottom="10dp">
+
+                            <ImageView
+                                android:id="@+id/imageview_user_photo_nav"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/default_photo"/>
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:id="@+id/tv_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/imageview_user_photo_nav"
+                            android:layout_below="@id/card_iv_user_photo_nav"
                             android:layout_marginStart="10dp"
                             android:text="{user.name}"
                             android:textColor="?inverseColor"

@@ -61,12 +61,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:id="@+id/iv_subirFoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_photo" />
+        </androidx.cardview.widget.CardView>
         <EditText
             android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Email"
+            android:hint="*Email"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"/>
 
@@ -75,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Nombre de usuario"
+            android:hint="*Nombre de usuario"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
 
@@ -84,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Contraseña"
+            android:hint="*Contraseña"
             android:inputType="textPassword"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
