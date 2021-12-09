@@ -8,6 +8,9 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Us
 
 interface APIService {
     //USUARIOS
+    @GET("Usuario/{id}")
+    suspend fun getUsuario(@Path("id")idUsuario: Int): Usuario
+
     @POST("Login")
     suspend fun logearse(@Body usuario: RequestBody): Usuario
 
