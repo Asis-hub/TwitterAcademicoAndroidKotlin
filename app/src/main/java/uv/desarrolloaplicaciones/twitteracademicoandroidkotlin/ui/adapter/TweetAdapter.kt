@@ -2,14 +2,17 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.PerfilActivity
 
 class TweetAdapter(internal var context: Context, private var tweets: MutableList<Tweet>) : androidx.recyclerview.widget.RecyclerView.Adapter<TweetAdapter.ViewHolder>() {
 
@@ -18,7 +21,6 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.itemlayout_tweet, parent, false)
-        println(tweets)
         return ViewHolder(v)
     }
 
@@ -69,7 +71,15 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         }
 
         fun bind(tweet: Tweet) {
-            //
+            foto.setOnClickListener{
+                val intent = Intent(context,PerfilActivity::class.java)
+                intent.putExtra("id",tweet.tuiteadoPor)
+                intent.putExtra("nombre", tweet.nombre)
+                intent.putExtra("nombreUsuario", tweet.nombreUsuario)
+                startActivity(context,intent,null)
+            }
+
+
             if (tweet.fotoPerfil != null) {
                 cargarImagen(foto, tweet.fotoPerfil)
             } else {
@@ -87,9 +97,10 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             }
 
             // Muestra el botón edit si el tweeet es de la persona que esta en la aplicación
-            //if(tweets[position].tweetBy == context.getSharedPref("id").toString().toInt()){
-            //editTweet.visibility = View.VISIBLE
-            //}
+            val sharedPreference = context.getSharedPreferences("USER_DATA",Context.MODE_PRIVATE)
+            if(tweet.tuiteadoPor == sharedPreference.getInt("id",0)){
+                editTweet.visibility = View.VISIBLE
+            }
         }
     }
 }
