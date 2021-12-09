@@ -4,9 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
@@ -45,20 +48,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun logearse(usuario: String, password: String) {
+        val json = JsonObject()
+        json.addProperty("NombreUsuario", usuario)
+        json.addProperty("Contraseña", password)
+
+        val jsonString = json.toString()
+        val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.logearse(usuario, password)
+                val response = service.logearse(requestBody)
                 runOnUiThread {
                     if (response != null) {
-                        if (response.isNotEmpty()) {
-                            mostrarMensaje("¡Bienvenido!")
-                            irAPantallaPrincipal(response[0])
-                        } else {
-                            mostrarMensaje("No existe un usuario con ese usuario y/o contraseña")
-                        }
+                        mostrarMensaje("¡Bienvenido!")
+                        irAPantallaPrincipal(response)
                     } else {
-                        mostrarMensaje("Error al ingresar")
+                        mostrarMensaje("No existe un usuario con ese usuario y/o contraseña")
                     }
                 }
             } catch (exception: Exception) {
