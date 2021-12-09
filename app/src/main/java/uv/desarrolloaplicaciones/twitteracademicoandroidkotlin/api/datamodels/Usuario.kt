@@ -3,6 +3,10 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels
 import com.google.gson.annotations.SerializedName
 
 data class Usuario(
+    @SerializedName("idUsuario")
+    var idUsuario: Int,
+    @SerializedName("FotoPerfil")
+    var fotoPerfil: ByteArray,
     @SerializedName("Nombre")
     var nombre: String,
     @SerializedName("ApellidoPaterno")

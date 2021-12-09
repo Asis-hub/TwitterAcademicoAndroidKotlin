@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="twitterBlue">#1CA1F1</color>
     <color name="twitterBlueDarker">#188CD3</color>
+    <color name="Error">#FF0000</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhitesmoke">#E8ECEC</color>
