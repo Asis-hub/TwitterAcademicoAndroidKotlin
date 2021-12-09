@@ -24,7 +24,6 @@ class HomeActivity : AppCompatActivity() {
     private var idUsuario = 0
     private lateinit var name: String
     private lateinit var username: String
-    private lateinit var accessToken: String
 
     private lateinit var myToggle: ActionBarDrawerToggle
     private lateinit var myDrawerLayout: DrawerLayout
@@ -45,8 +44,7 @@ class HomeActivity : AppCompatActivity() {
         //Recuperando datos de usuarios transferidos de la ventana de inicio de sesión
         idUsuario = intent.getIntExtra("id",0)
         name = intent.getStringExtra("nombre").toString()
-        username = intent.getStringExtra("username").toString()
-        accessToken = intent.getStringExtra("token").toString()
+        username = intent.getStringExtra("nombreUsuario").toString()
 
         mostrarInfoUsuario()
         initRecyclerview()
@@ -81,7 +79,6 @@ class HomeActivity : AppCompatActivity() {
 
         // compose fab
         binding.fabCompose.setOnClickListener {
-            // start the Compose activity
             startActivity(Intent(this@HomeActivity, CreateTweetActivity::class.java))
         }
 
@@ -108,7 +105,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun mostrarInfoUsuario() {
-        binding.tvUsername.text = username
+        binding.tvUsername.text = "@$username"
         binding.tvName.text = name
         //TODO Debe mostrar la imagen de perfil del usuario tambien
     }
