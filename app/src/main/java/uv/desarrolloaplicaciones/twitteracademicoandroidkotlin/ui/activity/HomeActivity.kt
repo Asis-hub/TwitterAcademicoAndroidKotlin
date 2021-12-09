@@ -1,10 +1,13 @@
 package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.facebook.drawee.backends.pipeline.Fresco
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -42,9 +45,14 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //Recuperando datos de usuarios transferidos de la ventana de inicio de sesión
-        idUsuario = intent.getIntExtra("id",0)
-        name = intent.getStringExtra("nombre").toString()
-        username = intent.getStringExtra("nombreUsuario").toString()
+        val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+        idUsuario = sharedPreferences.getInt("id", 0)
+        name = sharedPreferences.getString("nombre","name").toString()
+        username = sharedPreferences.getString("nombreUsuario","username").toString()
+
+        println("idUsuario = $idUsuario\n" +
+                "name = $name\n" +
+                "username = $username\n")
 
         mostrarInfoUsuario()
         initRecyclerview()
@@ -71,18 +79,20 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.navLogout.setOnClickListener {
-            // remove saved prefs with user data and launch intro.
+            val sharedPref = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+            sharedPref.edit().clear()
+            sharedPref.edit().commit()
+
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this@HomeActivity, MainActivity::class.java))
             finish()
         }
 
-        // compose fab
         binding.fabCompose.setOnClickListener {
             startActivity(Intent(this@HomeActivity, CreateTweetActivity::class.java))
         }
 
-        // swipe to refresh
+        // refresca la activity
         binding.tweetsRefreshLayout.setOnRefreshListener {
             recuperarTweets()
         }
@@ -107,7 +117,34 @@ class HomeActivity : AppCompatActivity() {
     private fun mostrarInfoUsuario() {
         binding.tvUsername.text = "@$username"
         binding.tvName.text = name
-        //TODO Debe mostrar la imagen de perfil del usuario tambien
+        cargarFotoUsuario(buscarFotoUsuario(idUsuario))
+    }
+
+    private fun buscarFotoUsuario(idUsuario: Int): Bitmap? {
+        var fotoUsuario: Bitmap? = null
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+
+                val img: ByteArray = service.getUsuario(idUsuario).fotoPerfil
+                //Si el usuario tiene una foto de perfil...
+                if(img != null) {
+                    fotoUsuario = BitmapFactory.decodeByteArray(img,0,img.size)
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+            }
+        }
+
+        return fotoUsuario
+    }
+
+    private fun cargarFotoUsuario(fotoUsuario: Bitmap?) {
+        if (fotoUsuario != null) {
+            binding.imageviewUserPhoto.setImageBitmap(fotoUsuario)
+            binding.imageviewUserPhotoNav.setImageBitmap(fotoUsuario)
+        }
     }
 
     private fun recuperarTweets() {
@@ -116,15 +153,12 @@ class HomeActivity : AppCompatActivity() {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
                 val response = service.recuperarTweets(idUsuario)
-                /*TODO TEMPORAL
-                   val response = service.recuperarTweets(5)*/
 
                 runOnUiThread {
                     if(response.isNotEmpty()) {
                         tweets.clear()
                         tweets.addAll(response)
                         tweetsAdapter.actualizarTweets(tweets)
-                        println(binding.recyclerviewTweets.adapter!!.itemCount)
                     } else {
                         mostrarMensaje("¡No hay tweets! Sigue a alguien o haz un tweet")
                     }

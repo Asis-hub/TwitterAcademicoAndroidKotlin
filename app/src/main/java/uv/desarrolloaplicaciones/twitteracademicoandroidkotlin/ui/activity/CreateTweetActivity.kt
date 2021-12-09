@@ -20,7 +20,7 @@ class CreateTweetActivity : AppCompatActivity() {
             .placeholder(R.drawable.ic_launcher_background)
             .error(R.drawable.default_photo)
             .into(binding.imageviewUserPhoto)
-        binding.btnCreateTweet.setOnClickListener{
+        binding.btnGuardarPerfil.setOnClickListener{
             checkTweetLegth()
         }
     }
