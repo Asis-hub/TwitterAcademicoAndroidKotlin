@@ -14,6 +14,9 @@
         android:theme="@style/Theme.TwitterAcademicoAndroidKotlin"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.activity.EditarPerfilActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.PerfilActivity"
             android:exported="false" />
         <activity
