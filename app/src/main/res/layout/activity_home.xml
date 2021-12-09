@@ -8,7 +8,7 @@
     tools:context=".ui.activity.HomeActivity">
 
     <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
+        android:id="@+id/drawerLayoutHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -35,9 +35,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="left"
                     android:layout_marginEnd="20dp"
-                    android:scaleType="fitCenter"
-                    app:roundAsCircle="true"
-                    tools:srcCompat="@drawable/default_photo" />
+                    android:src="@drawable/default_photo" />
 
                 <TextView
                     android:id="@+id/custom_title"
@@ -77,15 +75,15 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
-                android:elevation="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:background="?backgroundColor"
-                app:menu="@menu/bottom_nav_menu"
+                android:elevation="7dp"
                 app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
+                app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
                 app:labelVisibilityMode="unlabeled"
-                app:itemTextColor="@drawable/bottom_nav_icon_color_selector" />
+                app:menu="@menu/bottom_nav_menu" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_compose"
@@ -93,10 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/bottom_navigation"
                 android:layout_alignParentRight="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_margin="20dp"
                 android:src="@drawable/ic_twitter_compose"
                 android:tint="@color/colorWhite" />
 
@@ -104,7 +99,7 @@
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_view"
+            android:id="@+id/navigation_view_home"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
@@ -133,8 +128,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginBottom="10dp"
-                            app:placeholderImage="@drawable/default_photo"
-                            app:roundAsCircle="true" />
+                            android:src="@drawable/default_photo"/>
 
                         <TextView
                             android:id="@+id/tv_name"
@@ -284,6 +278,11 @@
                         android:textSize="14sp" />
 
                 </RelativeLayout>
+
+
+
+
+
 
 
             </RelativeLayout>
