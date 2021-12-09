@@ -14,7 +14,7 @@
         app:navigationIcon="@drawable/ic_close">
 
         <Button
-            android:id="@+id/btn_create_tweet"
+            android:id="@+id/btn_guardarPerfil"
             style="android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
@@ -31,9 +31,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="17sp"
+            android:text="Crear tweet"
             android:textColor="@color/twitterBlueDarker"
-            android:text="Crear tweet" />
+            android:textSize="17sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
