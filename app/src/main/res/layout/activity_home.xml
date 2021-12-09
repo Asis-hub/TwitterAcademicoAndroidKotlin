@@ -85,25 +85,6 @@
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/bottom_nav_menu" />
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="90dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_perfil"
-                    app:tint="@color/twitterBlue" />
-            </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="90dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
-                android:src="@drawable/ic_perfil"
-                app:tint="@color/twitterBlue" />
-
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_compose"
                 android:layout_width="wrap_content"
