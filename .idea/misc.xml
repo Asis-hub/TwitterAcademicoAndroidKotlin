@@ -42,6 +42,7 @@
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_splash_screen.xml" value="0.22" />
         <entry key="..\:/Users/asisr/AndroidStudioProjects/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/itemlayout_tweet.xml" value="0.5" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/bg_gradient.xml" value="0.3671875" />
+        <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/bordes_redondos.xml" value="0.2203125" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/bottom_nav_icon_color_selector.xml" value="0.3203125" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/btn_round_blue.xml" value="0.3203125" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/ic_homesparkles.xml" value="0.3671875" />
@@ -51,7 +52,9 @@
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/ic_twitter_home_outline.xml" value="0.3671875" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/drawable/ic_twitter_search_outline.xml" value="0.21145833333333333" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_crear_cuenta.xml" value="0.25" />
-        <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_home.xml" value="0.22" />
+        <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_create_tweet.xml" value="0.15942028985507245" />
+        <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_editar_perfil.xml" value="0.25" />
+        <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_home.xml" value="0.33" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_login.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/enano/Documents/GitHub/TwitterAcademicoAndroidKotlin/app/src/main/res/layout/activity_perfil.xml" value="0.22" />
