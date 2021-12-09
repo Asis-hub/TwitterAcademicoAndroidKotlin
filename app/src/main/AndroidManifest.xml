@@ -18,6 +18,9 @@
             android:name=".ui.activity.CreateTweetActivity"
             android:exported="false"/>
         <activity
+            android:name=".ui.activity.BusquedaActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.EditarPerfilActivity"
             android:exported="false" />
         <activity

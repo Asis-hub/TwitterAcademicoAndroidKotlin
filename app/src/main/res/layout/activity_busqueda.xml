@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.PerfilActivity">
+    android:background="?backgroundColor"
+    tools:context=".ui.activity.BusquedaActivity">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
@@ -16,6 +17,46 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="1dp"
+                android:background="?backgroundColor"
+                android:elevation="8dp"
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+                <ImageView
+                    android:id="@+id/imageview_user_photo"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="left"
+                    android:layout_marginEnd="20dp"
+                    android:scaleType="fitCenter"
+                    app:roundAsCircle="true"
+                    tools:srcCompat="@drawable/default_photo" />
+
+                <ImageView
+                    android:id="@+id/btnBuscarBusqueda"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_twitter_compose"
+                    app:tint="@color/twitterBlue" />
+
+                <TextView
+                    android:id="@+id/tfBuscadorBusqueda"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="20dp"
+                    android:hint="Ingresar busqueda..." />
+
+            </androidx.appcompat.widget.Toolbar>
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/tweets_refresh_layout"
@@ -32,66 +73,6 @@
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="-1dp"
-                android:background="?backgroundColor"
-                android:elevation="8dp"
-                android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/drawee_user_photo"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="left"
-                    android:layout_marginEnd="20dp"
-                    app:placeholderImage="@drawable/default_photo"
-                    app:roundAsCircle="true" />
-
-                <TextView
-                    android:id="@+id/custom_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:text="Perfil"
-                    android:textColor="?attr/inverseColor"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    android:id="@+id/btnConfiguracionPerfil"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="right"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/ic_configuracion"
-                    android:visibility="invisible"
-                    app:tint="@color/twitterBlue" />
-
-                <Button
-                    android:id="@+id/btnSeguirPerfil"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="120dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/btn_round_blue"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:text="Seguir"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="15sp"
-                    android:visibility="visible" />
-
-
-            </androidx.appcompat.widget.Toolbar>
-
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
@@ -102,21 +83,19 @@
                 app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
                 app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
                 app:labelVisibilityMode="unlabeled"
-                app:menu="@menu/bottom_nav_menu" />
+                app:menu="@menu/bottom_nav_menu">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_compose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/bottom_navigation"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/ic_twitter_compose"
-                android:tint="@color/colorWhite"
-                tools:ignore="SpeakableTextPresentCheck" />
+                <ImageView
+                    android:id="@+id/btnPerfilBusqueda"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="90dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/ic_perfil"
+                    app:tint="@color/twitterBlue" />
+            </com.google.android.material.bottomnavigation.BottomNavigationView>
+
 
         </RelativeLayout>
 
@@ -142,12 +121,14 @@
                         android:background="@android:color/transparent"
                         android:padding="10dp">
 
-                        <com.facebook.drawee.view.SimpleDraweeView
-                            android:id="@+id/drawee_user_photo_nav"
+                        <ImageView
+                            android:id="@+id/imageview_user_photo_nav"
                             android:layout_width="70dp"
                             android:layout_height="70dp"
-                            android:layout_margin="10dp"
-                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
                             app:placeholderImage="@drawable/default_photo"
                             app:roundAsCircle="true" />
 
@@ -155,7 +136,7 @@
                             android:id="@+id/tv_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/drawee_user_photo_nav"
+                            android:layout_below="@id/imageview_user_photo_nav"
                             android:layout_marginStart="10dp"
                             android:text="{user.name}"
                             android:textColor="?inverseColor"
@@ -301,11 +282,6 @@
                 </RelativeLayout>
 
 
-
-
-
-
-
             </RelativeLayout>
 
 
@@ -314,4 +290,5 @@
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
