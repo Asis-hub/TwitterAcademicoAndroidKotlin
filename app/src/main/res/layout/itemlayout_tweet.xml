@@ -67,7 +67,7 @@
         app:srcCompat="@drawable/ic_baseline_image_24" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/iv_moreOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
