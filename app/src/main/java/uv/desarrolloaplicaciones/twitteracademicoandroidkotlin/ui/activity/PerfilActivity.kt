@@ -132,7 +132,7 @@ class PerfilActivity : AppCompatActivity() {
             if (esSeguidor) {
                 dejarSeguirUsuario(idUsuarioOriginal, idUsuario)
             } else {
-                seguirUsuario(idUsuario,idUsuarioOriginal)
+                seguirUsuario(idUsuarioOriginal,idUsuario)
             }
         }
 
