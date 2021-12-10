@@ -31,6 +31,11 @@ class LoginActivity : AppCompatActivity() {
                 logearse(binding.etUsername.text.toString(), binding.etPassword.text.toString())
             }
         }
+
+        binding.tvSignUp.setOnClickListener {
+            val intent = Intent(this, CrearCuenta::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun camposVacios(): Boolean {
