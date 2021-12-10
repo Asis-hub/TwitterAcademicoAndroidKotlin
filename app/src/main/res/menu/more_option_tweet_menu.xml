@@ -6,4 +6,7 @@
     <item
         android:id="@+id/seguirUsuario"
         android:title="@string/seguirUsuario"/>
+    <item
+        android:id="@+id/dejarSeguirUsuario"
+        android:title="@string/dejarSeguir"/>
 </menu>
