@@ -12,9 +12,12 @@ import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
@@ -28,6 +31,7 @@ class PerfilActivity : AppCompatActivity() {
     private var idUsuario = 0
     private lateinit var name: String
     private lateinit var username: String
+    private var esSeguidor: Boolean = false
 
     private var idUsuarioOriginal = 0
     private lateinit var nameOriginal: String
@@ -74,6 +78,7 @@ class PerfilActivity : AppCompatActivity() {
         binding.bottomNavigation.menu[0].setOnMenuItemClickListener(::manageItemClick)
         binding.bottomNavigation.menu[1].setOnMenuItemClickListener(::manageItemClick)
 
+        initBotonSeguir(idUsuario, idUsuarioOriginal)
         mostrarInfoUsuario()
         llenarCampoPantallaPerfil()
         initRecyclerview()
@@ -120,7 +125,86 @@ class PerfilActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.btnSeguirPerfil.setOnClickListener {
+            if (esSeguidor) {
+                dejarSeguirUsuario(idUsuarioOriginal, idUsuario)
+            } else {
+                seguirUsuario(idUsuario,idUsuarioOriginal)
+            }
+        }
+
         recuperarTweets()
+    }
+
+    private fun seguirUsuario(usuarioSeguidor: Int, usuarioASeguir: Int) {
+        val json = JsonObject()
+        json.addProperty("idUsuario", usuarioASeguir)
+        json.addProperty("idSeguidor", usuarioSeguidor)
+
+        val jsonString = json.toString()
+        val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val response = service.seguirUsuario(requestBody)
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (response.respuesta == "Follow") {
+                        mostrarMensaje("Usuario seguido")
+                        esSeguidor = true
+                    } else if (response.respuesta == "Error con el servidor") {
+                        mostrarMensaje("Error con el servidor")
+                    }
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                mostrarMensaje(resources.getString(R.string.mensajeError))
+            }
+        }
+    }
+    private fun dejarSeguirUsuario(usuarioSeguidor: Int, usuarioSeguido: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val response = service.dejarSeguir(usuarioSeguido, usuarioSeguidor)
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (response.respuesta == "Unfollow") {
+                        mostrarMensaje("Se ha dejado de seguir al usuario")
+                        reiniciarActivity()
+                    } else if (response.respuesta == "Not_Followed") {
+                        mostrarMensaje("No se esta siguiendo a esta persona")
+                    }
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                mostrarMensaje(resources.getString(R.string.mensajeError))
+            }
+        }
+    }
+
+    private fun reiniciarActivity() {
+        val intent = Intent(this, PerfilActivity::class.java)
+        finish()
+        startActivity(intent)
+    }
+
+    private fun initBotonSeguir(idUsuario: Int, idUsuarioOriginal: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val service = ServiceBuilder.buildService(APIService::class.java)
+            val response = service.verificarSeguidor(idUsuarioOriginal, idUsuario)
+
+            runOnUiThread {
+                if (response.respuesta == "Y") {
+                    binding.btnSeguirPerfil.text = resources.getString(R.string.dejarSeguir)
+                    esSeguidor = true
+                } else if (response.respuesta == "N"){
+                    binding.btnSeguirPerfil.text = resources.getString(R.string.seguirUsuario)
+                    esSeguidor = false
+                }
+            }
+        }
     }
 
     private fun initRecyclerview() {
