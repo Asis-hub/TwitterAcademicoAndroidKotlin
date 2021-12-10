@@ -3,6 +3,7 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Like
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Seguidor
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
@@ -36,7 +37,8 @@ interface APIService {
     suspend fun verificarSeguidor(@Path("idUsuario") idUsuario: Int,
                                   @Path("idUsuarioComparacion") idUsuarioComparacion: Int): Seguidor
 
-
+    @GET("Seguidores/{idUsuario}")
+    suspend fun recuperarSeguidores(@Path("idUsuario") idUsuario: Int): List<Seguidor>
 
     //TWEETS
 
@@ -55,4 +57,17 @@ interface APIService {
 
     @GET("Tweet/Content/{keyword}")
     suspend fun buscarTweetContenido(@Path("keyword") keyword: String): List<Tweet>
+
+    //LIKES
+  
+    @GET("Likes/{idTweet}/{idUsuario}")
+    suspend fun isLiked(@Path("idTweet") idTweet: Int, @Path("idUsuario") idUsuario: Int): Like
+
+    @Headers("Content-Type: application/json")
+    @POST("Likes")
+    suspend fun darLike(@Body nuevoLike: RequestBody): Response<Like>
+
+    @Headers("Content-Type: application/json")
+    @DELETE("Likes/{idTweet}/{idUsuario}")
+    suspend fun quitarLike(@Path("idTweet") idTweet: Int, @Path("idUsuario") idUsuario: Int): Like
 }
