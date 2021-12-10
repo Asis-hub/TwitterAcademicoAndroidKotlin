@@ -22,7 +22,7 @@ import java.util.*
 class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var username: String
-    private lateinit var idUsuario: Int
+    private var idUsuario: Int = 0
     private lateinit var name: String
 
     private lateinit var binding: ActivityBusquedaBinding
