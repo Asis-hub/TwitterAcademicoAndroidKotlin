@@ -42,6 +42,9 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         holder.bind(item)
     }
     fun actualizarTweets() {
+        val temporal = tweets
+        tweets.clear()
+        tweets.addAll(temporal)
         notifyDataSetChanged()
     }
 

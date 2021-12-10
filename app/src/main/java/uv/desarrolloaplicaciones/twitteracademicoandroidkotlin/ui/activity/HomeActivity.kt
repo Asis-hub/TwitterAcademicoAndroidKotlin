@@ -123,7 +123,9 @@ class HomeActivity : AppCompatActivity() {
 
         // refresca la activity
         binding.tweetsRefreshLayout.setOnRefreshListener {
-            recuperarTweets()
+            val intent = Intent(this, HomeActivity::class.java)
+            finish()
+            startActivity(intent)
         }
 
         recuperarTweets()
