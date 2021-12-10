@@ -39,4 +39,8 @@ interface APIService {
 
     @GET("Tweet/{id}")
     suspend fun recuperarTweets(@Path("id") idUsuario: Int): List<Tweet>
+
+    @Headers("Content-Type: application/json")
+    @POST("Tweet")
+    suspend fun registrarTweet(@Body nuevoTweet: RequestBody): Response<Tweet>
 }

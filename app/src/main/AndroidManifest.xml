@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".ui.activity.CreateTweetActivity"
+            android:name=".ui.activity.CrearTweet"
             android:exported="false"/>
         <activity
             android:name=".ui.activity.BusquedaActivity"
