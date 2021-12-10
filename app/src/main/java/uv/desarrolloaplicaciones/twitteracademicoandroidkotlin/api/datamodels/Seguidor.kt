@@ -7,6 +7,6 @@ data class Seguidor(
     var idUsuario: Int,
     @SerializedName("idUsuario")
     var idSeguidor: Int,
-    @SerializedName("description")
+    @SerializedName("Respuesta")
     var respuesta: String
 )

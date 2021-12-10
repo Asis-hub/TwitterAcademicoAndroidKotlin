@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
                 val service = ServiceBuilder.buildService(APIService::class.java)
                 val response = service.logearse(requestBody)
                 runOnUiThread {
-                    if (response.respuesta.isNullOrBlank()) {
+                    if (response.respuesta == "Logeado" ) {
                         mostrarMensaje("¡Bienvenido!")
                         irAPantallaPrincipal(response)
                     } else if(response.respuesta == "Favor de verificar su informacion"){

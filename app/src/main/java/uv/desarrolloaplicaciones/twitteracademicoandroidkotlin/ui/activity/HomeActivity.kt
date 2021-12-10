@@ -89,7 +89,18 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.fabCompose.setOnClickListener {
-            startActivity(Intent(this@HomeActivity, CreateTweetActivity::class.java))
+            val intent = Intent(this, CrearTweet::class.java)
+
+            //Comparte algunos datos del usuario para usarlos en la siguiente activity (CrearTweet)
+            val sharedPref = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+            var editor = sharedPref.edit()
+            editor.putInt("id", idUsuario)
+            editor.putString("nombre", name)
+            editor.putString("nombreUsuario", username)
+            editor.commit()
+
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
 
         // refresca la activity
