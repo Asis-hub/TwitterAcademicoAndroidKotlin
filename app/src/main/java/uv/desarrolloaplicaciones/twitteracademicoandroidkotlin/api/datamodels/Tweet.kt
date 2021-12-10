@@ -20,5 +20,7 @@ data class Tweet (
     @SerializedName("NombreUsuario")
     var nombreUsuario: String,
     @SerializedName("FotoPerfil")
-    var fotoPerfil: ByteArray
+    var fotoPerfil: ByteArray,
+    @SerializedName("Respuesta")
+    var respuesta: String
 )
