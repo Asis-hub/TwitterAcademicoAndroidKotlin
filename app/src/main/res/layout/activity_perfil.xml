@@ -45,41 +45,34 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
 
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/drawee_user_photo"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                <Button
+                    android:id="@+id/btnVolverPerfil"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="left"
                     android:layout_marginEnd="20dp"
-                    app:placeholderImage="@drawable/default_photo"
-                    app:roundAsCircle="true" />
+                    android:onClick="btnVolverPerfil"
+                    android:src="@drawable/ic_volver"
+                    app:tint="@color/twitterBlue" />
 
                 <TextView
-                    android:id="@+id/custom_title"
+                    android:id="@+id/txtPerfil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
                     android:layout_marginBottom="5dp"
                     android:text="Perfil"
                     android:textColor="?attr/inverseColor"
                     android:textSize="20sp" />
 
-                <ImageView
-                    android:id="@+id/btnConfiguracionPerfil"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="right"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/ic_configuracion"
-                    android:visibility="invisible"
-                    app:tint="@color/twitterBlue" />
 
                 <Button
                     android:id="@+id/btnSeguirPerfil"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="120dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
                     android:background="@drawable/btn_round_blue"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -99,7 +92,7 @@
                 android:layout_alignParentBottom="true"
                 android:background="?backgroundColor"
                 android:elevation="7dp"
-                app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
+
                 app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/bottom_nav_menu" />
@@ -146,8 +139,10 @@
                             android:id="@+id/drawee_user_photo_nav"
                             android:layout_width="70dp"
                             android:layout_height="70dp"
-                            android:layout_margin="10dp"
-                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
                             app:placeholderImage="@drawable/default_photo"
                             app:roundAsCircle="true" />
 
@@ -157,7 +152,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/drawee_user_photo_nav"
                             android:layout_marginStart="10dp"
-                            android:text="{user.name}"
+                            android:text="Perfil"
                             android:textColor="?inverseColor"
                             android:textSize="15sp" />
 
