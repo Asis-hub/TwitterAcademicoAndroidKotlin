@@ -1,5 +1,6 @@
 package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -20,6 +21,10 @@ import java.util.*
 
 class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
+    private lateinit var username: String
+    private lateinit var idUsuario: Int
+    private lateinit var name: String
+
     private lateinit var binding: ActivityBusquedaBinding
     private lateinit var tweetsAdapter: TweetAdapter
     private val tweets = mutableListOf<Tweet>()
@@ -28,12 +33,19 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         super.onCreate(savedInstanceState)
         binding = ActivityBusquedaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+        idUsuario = sharedPreferences.getInt("id", 0)
+        name = sharedPreferences.getString("nombre","name").toString()
+        username = sharedPreferences.getString("nombreUsuario","username").toString()
+
         binding.svBuscador.setOnQueryTextListener(this)
         initRecyclerView()
     }
 
     private fun initRecyclerView() {
-        tweetsAdapter = TweetAdapter(this, tweets)
+        tweetsAdapter = TweetAdapter(this, tweets,idUsuario)
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.recyclerviewBusqueda.layoutManager = layoutManager
