@@ -1,10 +1,13 @@
 package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +37,20 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         binding = ActivityBusquedaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        fun manageItemClick(menuItem: MenuItem): Boolean {
+            var resultado = false
+
+            when(menuItem.itemId) {
+                R.id.action_home -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    finish()
+                    startActivity(intent)
+                }
+            }
+
+            return resultado
+        }
+        binding.bottomNavigation.menu[0].setOnMenuItemClickListener(::manageItemClick)
 
         val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
         idUsuario = sharedPreferences.getInt("id", 0)
@@ -41,6 +58,11 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         username = sharedPreferences.getString("nombreUsuario","username").toString()
 
         binding.svBuscador.setOnQueryTextListener(this)
+        binding.tweetsRefreshLayout.setOnRefreshListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            finish()
+            startActivity(intent)
+        }
         initRecyclerView()
     }
 
