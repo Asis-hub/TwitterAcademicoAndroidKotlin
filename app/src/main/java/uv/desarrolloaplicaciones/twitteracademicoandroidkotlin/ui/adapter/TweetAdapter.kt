@@ -4,13 +4,22 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.PopupMenu
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.PerfilActivity
 
@@ -61,6 +70,8 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         private val tvEdited = itemView.findViewById<TextView>(R.id.tv_tweet_edited)
         private val editTweet = itemView.findViewById<ImageView>(R.id.tweet_action_edit)
         private val like = itemView.findViewById<ImageView>(R.id.tweet_action_like)
+        private val options = itemView.findViewById<ImageView>(R.id.iv_moreOptions)
+        private lateinit var tweet: Tweet
 
         init {
             editTweet.setOnClickListener(this)
@@ -71,12 +82,29 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         }
 
         fun bind(tweet: Tweet) {
+            this.tweet = tweet
+            val sharedPreference = context.getSharedPreferences("USER_DATA",Context.MODE_PRIVATE)
+
             foto.setOnClickListener{
                 val intent = Intent(context,PerfilActivity::class.java)
-                intent.putExtra("id",tweet.tuiteadoPor)
-                intent.putExtra("nombre", tweet.nombre)
-                intent.putExtra("nombreUsuario", tweet.nombreUsuario)
+
+                val sharedPref = context.getSharedPreferences("OTHER_USER_DATA", Context.MODE_PRIVATE)
+                sharedPref.edit().putInt("id",tweet.tuiteadoPor)
+                sharedPref.edit().putString("nombre", tweet.nombre)
+                sharedPref.edit().putString("nombreUsuario", tweet.nombreUsuario)
+                sharedPref.edit().commit()
+
                 startActivity(context,intent,null)
+            }
+            options.setOnClickListener {view ->
+                val popupMenu = PopupMenu(context, view)
+                //TODO Si un usuario es seguidor el boton dice: Dejar de seguir
+                // Si el usuario no es un seguidor el boton dice: Seguir usuario
+                // if(usuarioEsSeguidor(sharedPreference.getInt("id", 0),tweet.tuiteadoPor))
+                popupMenu.menu.add(R.string.seguirUsuario)
+
+                popupMenu.setOnMenuItemClickListener(::manageItemClick)
+                popupMenu.show()
             }
 
 
@@ -97,10 +125,61 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             }
 
             // Muestra el botón edit si el tweeet es de la persona que esta en la aplicación
-            val sharedPreference = context.getSharedPreferences("USER_DATA",Context.MODE_PRIVATE)
-            if(tweet.tuiteadoPor == sharedPreference.getInt("id",0)){
+            if(tweet.tuiteadoPor == sharedPreference.getInt("id", 0)){
                 editTweet.visibility = View.VISIBLE
             }
         }
+        //TODO Funcion en progreso
+        private fun usuarioEsSeguidor(usuario: Int, seguidor: Int): Boolean {
+            var usuarioEsSeguidor = false
+            CoroutineScope(Dispatchers.IO).launch {
+
+            }
+            return usuarioEsSeguidor
+        }
+
+        private fun manageItemClick(menuItem: MenuItem): Boolean {
+            val sharedPreference = context.getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+
+            var resultado = false
+            when(menuItem.itemId) {
+                R.id.seguirUsuario -> {
+                    seguirUsuario(
+                        sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
+                }
+            }
+
+            return resultado
+        }
+
+        private fun seguirUsuario(usuarioSeguidor: Int, usuarioASeguir: Int) {
+            val json = JsonObject()
+            json.addProperty("idUsuario", usuarioASeguir)
+            json.addProperty("idSeguidor", usuarioSeguidor)
+
+            val jsonString = json.toString()
+            val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val service = ServiceBuilder.buildService(APIService::class.java)
+                    val response = service.seguirUsuario(requestBody)
+
+                    withContext(Dispatchers.Main) {
+                        if (response.respuesta == "Follow") {
+                            mostrarMensaje("Usuario seguido")
+                        } else if (response.respuesta == "Error con el servidor") {
+                            mostrarMensaje("Error con el servidor")
+                        }
+                    }
+                } catch (exception: Exception) {
+
+                }
+            }
+        }
+    }
+
+    private fun mostrarMensaje(mensaje: String) {
+        Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show()
     }
 }

@@ -29,4 +29,5 @@
     <string name="mes">Mes</string>
     <string name="anio">Año</string>
     <string name="fecNac">Fecha de nacimiento</string>
+    <string name="seguirUsuario">Seguir usuario</string>
 </resources>
