@@ -89,19 +89,24 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                 val intent = Intent(context,PerfilActivity::class.java)
 
                 val sharedPref = context.getSharedPreferences("OTHER_USER_DATA", Context.MODE_PRIVATE)
-                sharedPref.edit().putInt("id",tweet.tuiteadoPor)
-                sharedPref.edit().putString("nombre", tweet.nombre)
-                sharedPref.edit().putString("nombreUsuario", tweet.nombreUsuario)
-                sharedPref.edit().commit()
+                val editor = sharedPref.edit()
+                editor.putInt("id",tweet.tuiteadoPor)
+                editor.putString("nombre", tweet.nombre)
+                editor.putString("nombreUsuario", tweet.nombreUsuario)
+                editor.commit()
 
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(context,intent,null)
             }
             options.setOnClickListener {view ->
                 val popupMenu = PopupMenu(context, view)
                 //TODO Si un usuario es seguidor el boton dice: Dejar de seguir
                 // Si el usuario no es un seguidor el boton dice: Seguir usuario
-                // if(usuarioEsSeguidor(sharedPreference.getInt("id", 0),tweet.tuiteadoPor))
-                popupMenu.menu.add(R.string.seguirUsuario)
+                if(usuarioEsSeguidor(sharedPreference.getInt("id", 0),tweet.tuiteadoPor)) {
+                    popupMenu.menu.add(R.string.dejarSeguir)
+                } else {
+                    popupMenu.menu.add(R.string.seguirUsuario)
+                }
 
                 popupMenu.setOnMenuItemClickListener(::manageItemClick)
                 popupMenu.show()
@@ -132,8 +137,9 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         //TODO Funcion en progreso
         private fun usuarioEsSeguidor(usuario: Int, seguidor: Int): Boolean {
             var usuarioEsSeguidor = false
-            CoroutineScope(Dispatchers.IO).launch {
 
+            CoroutineScope(Dispatchers.IO).launch {
+                val service = ServiceBuilder.buildService(APIService::class.java)
             }
             return usuarioEsSeguidor
         }
