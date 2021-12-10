@@ -6,11 +6,13 @@ import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.Visibility
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
@@ -192,17 +194,21 @@ class PerfilActivity : AppCompatActivity() {
     }
 
     private fun initBotonSeguir(idUsuario: Int, idUsuarioOriginal: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val service = ServiceBuilder.buildService(APIService::class.java)
-            val response = service.verificarSeguidor(idUsuarioOriginal, idUsuario)
+        if (idUsuario == idUsuarioOriginal) {
+            binding.btnSeguirPerfil.visibility = View.INVISIBLE
+        } else {
+            CoroutineScope(Dispatchers.IO).launch {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val response = service.verificarSeguidor(idUsuarioOriginal, idUsuario)
 
-            runOnUiThread {
-                if (response.respuesta == "Y") {
-                    binding.btnSeguirPerfil.text = resources.getString(R.string.dejarSeguir)
-                    esSeguidor = true
-                } else if (response.respuesta == "N"){
-                    binding.btnSeguirPerfil.text = resources.getString(R.string.seguirUsuario)
-                    esSeguidor = false
+                runOnUiThread {
+                    if (response.respuesta == "Y") {
+                        binding.btnSeguirPerfil.text = resources.getString(R.string.dejarSeguir)
+                        esSeguidor = true
+                    } else if (response.respuesta == "N"){
+                        binding.btnSeguirPerfil.text = resources.getString(R.string.seguirUsuario)
+                        esSeguidor = false
+                    }
                 }
             }
         }
