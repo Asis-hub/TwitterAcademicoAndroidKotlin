@@ -41,12 +41,6 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         val item = tweets[position]
         holder.bind(item)
     }
-
-    fun actualizarTweets(nuevosTweets: MutableList<Tweet>, usuarioRecibido: Int) {
-        tweets = nuevosTweets
-        idUsuario = usuarioRecibido
-        notifyDataSetChanged()
-    }
     fun actualizarTweets() {
         val temporal = tweets
         tweets.clear()
@@ -177,15 +171,16 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.verificarSeguidor(
-                        sharedPreference.getInt("id", 0),
-                        tweet.tuiteadoPor)
+                    val response = service.verificarSeguidor(tweet.tuiteadoPor,
+                        sharedPreference.getInt("id", 0))
 
                     CoroutineScope(Dispatchers.Main).launch {
-                        if (response.respuesta == "Y") {
-                            popupMenu.menu.add(R.string.dejarSeguir)
-                        } else {
-                            popupMenu.menu.add(R.string.seguirUsuario)
+                        if(tweet.tuiteadoPor != idUsuario){
+                            if (response.respuesta == "Y") {
+                                popupMenu.menu.add(R.string.dejarSeguir)
+                            } else {
+                                popupMenu.menu.add(R.string.seguirUsuario)
+                            }
                         }
                     }
                 }catch (exception: Exception) {
@@ -207,10 +202,12 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
 
             when(menuItem.title.toString()) {
                 context.resources.getString(R.string.seguirUsuario) -> {
-                    seguirUsuario(sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
+                    seguirUsuario(tweet.tuiteadoPor,
+                        sharedPreference.getInt("id", 0))
                 }
                 context.resources.getString(R.string.dejarSeguir) -> {
-                    dejarSeguirUsuario(sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
+                    dejarSeguirUsuario(tweet.tuiteadoPor,
+                        sharedPreference.getInt("id", 0))
                 }
                 context.resources.getString(R.string.borrar_tweet) -> {
                     borrarTweet(tweet.idTweet)

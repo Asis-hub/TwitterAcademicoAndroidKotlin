@@ -236,7 +236,7 @@ class PerfilActivity : AppCompatActivity() {
                     if(response.isNotEmpty()) {
                         tweets.clear()
                         tweets.addAll(response)
-                        tweetsAdapter.actualizarTweets(tweets, idUsuario)
+                        tweetsAdapter.actualizarTweets(tweets)
                     } else {
                         mostrarMensaje("¡No hay tweets! Sigue a alguien o haz un tweet")
                     }

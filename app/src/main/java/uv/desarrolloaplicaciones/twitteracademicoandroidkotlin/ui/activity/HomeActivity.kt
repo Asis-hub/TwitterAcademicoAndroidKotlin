@@ -184,7 +184,7 @@ class HomeActivity : AppCompatActivity() {
                         tweets.clear()
                         tweets.addAll(response)
                         println(response)
-                        tweetsAdapter.actualizarTweets(tweets, idUsuario)
+                        tweetsAdapter.actualizarTweets(tweets)
                     } else {
                         mostrarMensaje("¡No hay tweets! Sigue a alguien o haz un tweet")
                     }
