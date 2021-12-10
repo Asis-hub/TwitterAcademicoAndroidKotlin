@@ -1,3 +1,12 @@
 package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels
 
-data class Seguidor()
+import com.google.gson.annotations.SerializedName
+
+data class Seguidor(
+    @SerializedName("idSeguidor")
+    var idUsuario: Int,
+    @SerializedName("idUsuario")
+    var idSeguidor: Int,
+    @SerializedName("description")
+    var respuesta: String
+)
