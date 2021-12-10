@@ -168,8 +168,8 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.verificarSeguidor(tweet.tuiteadoPor,
-                        sharedPreference.getInt("id", 0))
+                    val response = service.verificarSeguidor(
+                        sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         if(tweet.tuiteadoPor != idUsuario){
@@ -199,12 +199,10 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
 
             when(menuItem.title.toString()) {
                 context.resources.getString(R.string.seguirUsuario) -> {
-                    seguirUsuario(tweet.tuiteadoPor,
-                        sharedPreference.getInt("id", 0))
+                    seguirUsuario(sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
                 }
                 context.resources.getString(R.string.dejarSeguir) -> {
-                    dejarSeguirUsuario(tweet.tuiteadoPor,
-                        sharedPreference.getInt("id", 0))
+                    dejarSeguirUsuario(sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
                 }
                 context.resources.getString(R.string.borrar_tweet) -> {
                     borrarTweet(tweet.idTweet)

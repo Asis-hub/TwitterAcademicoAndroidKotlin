@@ -26,6 +26,7 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter.TweetA
 class PerfilActivity : AppCompatActivity() {
 
     private var idUsuario = 0
+    private var idLogeado = 0
     private lateinit var name: String
     private lateinit var username: String
 
@@ -124,7 +125,7 @@ class PerfilActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerview() {
-        tweetsAdapter = TweetAdapter(this, tweets, idUsuario)
+        tweetsAdapter = TweetAdapter(this, tweets, idUsuarioOriginal)
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.recyclerviewBusqueda.layoutManager = layoutManager
@@ -146,7 +147,7 @@ class PerfilActivity : AppCompatActivity() {
             try {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.recuperarTweets(idUsuario)
+                val response = service.recuperarTweetsPerfil(idUsuario)
 
                 runOnUiThread {
                     if(response.isNotEmpty()) {
