@@ -66,7 +66,6 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 val response = service.buscarTweetContenido(query)
 
                 runOnUiThread {
-                    println(response)
                     if(response.isNotEmpty()) {
                         tweets.clear()
                         tweets.addAll(response)

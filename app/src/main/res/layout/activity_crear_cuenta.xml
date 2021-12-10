@@ -108,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Nombre"
+            android:hint="*Nombre"
             android:minHeight="32dp"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />

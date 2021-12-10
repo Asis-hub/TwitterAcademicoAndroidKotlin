@@ -150,7 +150,7 @@ class HomeActivity : AppCompatActivity() {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
 
-                val img: ByteArray = service.getUsuario(idUsuario).fotoPerfil
+                val img: ByteArray? = service.getUsuario(idUsuario).fotoPerfil
                 //Si el usuario tiene una foto de perfil...
                 if(img != null) {
                     fotoUsuario = BitmapFactory.decodeByteArray(img,0,img.size)
@@ -176,10 +176,12 @@ class HomeActivity : AppCompatActivity() {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
                 val response = service.recuperarTweets(idUsuario)
+                println(response)
                 runOnUiThread {
                     if(response.isNotEmpty()) {
                         tweets.clear()
                         tweets.addAll(response)
+                        println(response)
                         tweetsAdapter.actualizarTweets(tweets, idUsuario)
                     } else {
                         mostrarMensaje("¡No hay tweets! Sigue a alguien o haz un tweet")
@@ -187,6 +189,7 @@ class HomeActivity : AppCompatActivity() {
                 }
 
             } catch (excep: Exception) {
+                excep.printStackTrace()
                 binding.tweetsRefreshLayout.isRefreshing = false
                 mostrarMensaje("Hubo un error al tratar de cargar la pagina, vuelva a intentarlo más tarde")
             }
