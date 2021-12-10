@@ -3,11 +3,13 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Seguidor
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 
 interface APIService {
     //USUARIOS
+
     @GET("Usuario/{id}")
     suspend fun getUsuario(@Path("id")idUsuario: Int): Usuario
 
@@ -21,7 +23,16 @@ interface APIService {
     @POST("Usuario")
     suspend fun registrarUsuario(@Body nuevoUsuario: RequestBody): Response<Usuario>
 
+    //SEGUIDOR
+
+    @POST("Seguidor")
+    suspend fun seguirUsuario(@Body seguirUsuario: RequestBody): Seguidor
+
+    @GET("Seguidor/Seguido/{idUsuario}")
+    suspend fun recuperarSeguidores(@Path("idUsuario") idUsuario: Int): List<Seguidor>
+
     //TWEETS
+
     @GET("Tweet")
     suspend fun recuperarTweets(): List<Tweet>
 
