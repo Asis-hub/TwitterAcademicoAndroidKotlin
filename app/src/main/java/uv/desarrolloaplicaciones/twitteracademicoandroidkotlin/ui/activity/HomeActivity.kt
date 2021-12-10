@@ -3,7 +3,6 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.facebook.drawee.backends.pipeline.Fresco
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import android.content.Intent
 import android.graphics.Bitmap

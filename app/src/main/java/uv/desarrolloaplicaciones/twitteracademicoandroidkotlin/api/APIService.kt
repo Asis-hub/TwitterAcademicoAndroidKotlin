@@ -52,4 +52,7 @@ interface APIService {
 
     @DELETE("Tweet/{idTweet}")
     suspend fun eliminarTweet(@Path("idTweet") idTweet: Int): Tweet
+
+    @GET("Tweet/Content/{keyword}")
+    suspend fun buscarTweetContenido(@Path("keyword") keyword: String): List<Tweet>
 }
