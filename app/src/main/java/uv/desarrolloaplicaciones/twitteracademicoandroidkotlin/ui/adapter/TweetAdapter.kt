@@ -218,15 +218,20 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         }
         private fun borrarTweet(idTweet: Int) {
             CoroutineScope(Dispatchers.IO).launch {
-                val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.eliminarTweet(idTweet)
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (response.respuesta == "Tweet eliminado") {
-                        Toast.makeText(context,"Tweet eliminado con exito",Toast.LENGTH_SHORT).show()
-                    } else if(response.respuesta == "Tweet no encontrado") {
-                        Toast.makeText(context,"Tweet no encontrado", Toast.LENGTH_SHORT).show()
+                try {
+                    val service = ServiceBuilder.buildService(APIService::class.java)
+                    val response = service.eliminarTweet(idTweet)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (response.respuesta == "Tweet eliminado") {
+                            Toast.makeText(context,"Tweet eliminado con exito",Toast.LENGTH_SHORT).show()
+                        } else if(response.respuesta == "Tweet no encontrado") {
+                            Toast.makeText(context,"Tweet no encontrado", Toast.LENGTH_SHORT).show()
+                        }
+                        actualizarTweets()
                     }
-                    actualizarTweets()
+                } catch (exception: Exception) {
+                    exception.printStackTrace()
+                    mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
             }
         }
@@ -253,22 +258,16 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         actualizarTweets()
                     }
                 } catch (exception: Exception) {
-
+                    exception.printStackTrace()
+                    mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
             }
         }
         private fun dejarSeguirUsuario(usuarioSeguidor: Int, usuarioSeguido: Int) {
-            val json = JsonObject()
-            json.addProperty("idUsuario", usuarioSeguido)
-            json.addProperty("idSeguidor", usuarioSeguidor)
-
-            val jsonString = json.toString()
-            val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
-
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.dejarSeguir(requestBody)
+                    val response = service.dejarSeguir(usuarioSeguido, usuarioSeguidor)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         if (response.respuesta == "Unfollow") {
@@ -280,6 +279,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         actualizarTweets()
                     }
                 } catch (exception: Exception) {
+                    exception.printStackTrace()
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
             }
@@ -317,6 +317,8 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
     }
 
     private fun mostrarMensaje(mensaje: String) {
-        Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show()
+        CoroutineScope(Dispatchers.Main).launch {
+            Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show()
+        }
     }
 }
