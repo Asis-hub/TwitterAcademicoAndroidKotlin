@@ -75,7 +75,7 @@ class PerfilActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerview() {
-        tweetsAdapter = TweetAdapter(this, tweets)
+        tweetsAdapter = TweetAdapter(this, tweets, idUsuario)
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.recyclerviewBusqueda.layoutManager = layoutManager
@@ -103,7 +103,7 @@ class PerfilActivity : AppCompatActivity() {
                     if(response.isNotEmpty()) {
                         tweets.clear()
                         tweets.addAll(response)
-                        tweetsAdapter.actualizarTweets(tweets)
+                        tweetsAdapter.actualizarTweets(tweets, idUsuario)
                     } else {
                         mostrarMensaje("¡No hay tweets! Sigue a alguien o haz un tweet")
                     }
