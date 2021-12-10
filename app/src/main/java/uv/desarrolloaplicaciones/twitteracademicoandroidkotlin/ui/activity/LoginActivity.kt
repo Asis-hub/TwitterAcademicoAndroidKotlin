@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
@@ -70,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             } catch (exception: Exception) {
                 println("Excepcion:")
-                mostrarMensaje("Hubo un problema de conexión, intenta más tarde")
+                mostrarMensaje(resources.getString(R.string.mensajeError))
                 exception.printStackTrace()
             }
         }

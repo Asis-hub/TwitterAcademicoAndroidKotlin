@@ -3,6 +3,7 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Like
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Seguidor
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
@@ -28,8 +29,15 @@ interface APIService {
     @POST("Seguidor")
     suspend fun seguirUsuario(@Body seguirUsuario: RequestBody): Seguidor
 
+    @DELETE("Seguidor")
+    suspend fun dejarSeguir(@Body dejarSeguirUsuario: RequestBody): Seguidor
+
     //Recupera una lista de los seguidores de un usuario definido
-    @GET("Seguidor/Seguido/{idUsuario}")
+    @GET("Seguidor/{idUsuarioComparacion}/{idUsuario}")
+    suspend fun verificarSeguidor(@Path("idUsuario") idUsuario: Int,
+                                  @Path("idUsuarioComparacion") idUsuarioComparacion: Int): Seguidor
+
+    @GET("Seguidores/{idUsuario}")
     suspend fun recuperarSeguidores(@Path("idUsuario") idUsuario: Int): List<Seguidor>
 
     //TWEETS
@@ -43,4 +51,23 @@ interface APIService {
     @Headers("Content-Type: application/json")
     @POST("Tweet")
     suspend fun registrarTweet(@Body nuevoTweet: RequestBody): Response<Tweet>
+
+    @DELETE("Tweet/{idTweet}")
+    suspend fun eliminarTweet(@Path("idTweet") idTweet: Int): Tweet
+
+    @GET("Tweet/Content/{keyword}")
+    suspend fun buscarTweetContenido(@Path("keyword") keyword: String): List<Tweet>
+
+    //LIKES
+  
+    @GET("Likes/{idTweet}/{idUsuario}")
+    suspend fun isLiked(@Path("idTweet") idTweet: Int, @Path("idUsuario") idUsuario: Int): Like
+
+    @Headers("Content-Type: application/json")
+    @POST("Likes")
+    suspend fun darLike(@Body nuevoLike: RequestBody): Response<Like>
+
+    @Headers("Content-Type: application/json")
+    @DELETE("Likes/{idTweet}/{idUsuario}")
+    suspend fun quitarLike(@Path("idTweet") idTweet: Int, @Path("idUsuario") idUsuario: Int): Like
 }
