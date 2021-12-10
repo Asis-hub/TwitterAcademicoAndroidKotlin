@@ -51,6 +51,11 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         notifyDataSetChanged()
     }
 
+    fun actualizarTweets(nuevosTweets: MutableList<Tweet>) {
+        tweets = nuevosTweets
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
         return tweets.size
     }
