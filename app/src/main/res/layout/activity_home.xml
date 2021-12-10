@@ -32,10 +32,10 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    app:cardCornerRadius="100dp"
                     android:layout_gravity="left"
+                    android:layout_marginTop="15dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginTop="15dp">
+                    app:cardCornerRadius="100dp">
 
                     <ImageView
                         android:id="@+id/imageview_user_photo"
@@ -54,15 +54,6 @@
                     android:text="@string/str_home"
                     android:textColor="?attr/inverseColor"
                     android:textSize="20sp" />
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="right"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/ic_homesparkles"
-                    app:tint="@color/twitterBlue" />
-
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -89,7 +80,6 @@
                 android:layout_alignParentBottom="true"
                 android:background="?backgroundColor"
                 android:elevation="7dp"
-                app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
                 app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/bottom_nav_menu" />
@@ -201,7 +191,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:layout_gravity="start"
-                                android:drawableStart="@drawable/ic_twitter_like_outline"
+                                android:drawableStart="@drawable/ic_profile_config"
                                 android:drawablePadding="15dp"
                                 android:drawableTint="?inverseColorLite"
                                 android:gravity="start|center_vertical"

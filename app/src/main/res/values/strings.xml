@@ -31,4 +31,6 @@
     <string name="fecNac">Fecha de nacimiento</string>
     <string name="seguirUsuario">Seguir usuario</string>
     <string name="dejarSeguir">Dejar de seguir usuario</string>
+    <string name="borrar_tweet">Borrar tweet</string>
+    <string name="mensajeError">Hubo un problema de conexión, intenta más tarde</string>
 </resources>

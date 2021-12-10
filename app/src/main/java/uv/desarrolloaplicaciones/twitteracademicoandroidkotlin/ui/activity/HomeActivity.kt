@@ -8,8 +8,10 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
@@ -39,20 +41,35 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Fresco.initialize(this)
         binding = ActivityHomeBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
+
+        fun manageItemClick(menuItem: MenuItem): Boolean {
+            var resultado = false
+
+            when (menuItem.itemId) {
+                R.id.action_home -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    finish()
+                    startActivity(intent)
+                }
+                R.id.action_search -> {
+                    val intent = Intent(this,BusquedaActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                }
+            }
+
+            return resultado
+        }
+        binding.bottomNavigation.menu[0].setOnMenuItemClickListener(::manageItemClick)
+        binding.bottomNavigation.menu[1].setOnMenuItemClickListener(::manageItemClick)
 
         //Recuperando datos de usuarios transferidos de la ventana de inicio de sesión
         val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
         idUsuario = sharedPreferences.getInt("id", 0)
         name = sharedPreferences.getString("nombre","name").toString()
         username = sharedPreferences.getString("nombreUsuario","username").toString()
-
-        println("idUsuario = $idUsuario\n" +
-                "name = $name\n" +
-                "username = $username\n")
 
         mostrarInfoUsuario()
         initRecyclerview()
@@ -69,6 +86,8 @@ class HomeActivity : AppCompatActivity() {
             R.string.close)
         myDrawerLayout.addDrawerListener(myToggle)
         myToggle.syncState()
+
+
 
         binding.imageviewUserPhoto.setOnClickListener {
             if (myDrawerLayout.isDrawerOpen(navigationView)) {
@@ -119,12 +138,6 @@ class HomeActivity : AppCompatActivity() {
         binding.recyclerviewTweets.adapter = tweetsAdapter
     }
 
-    private fun restartActivity() {
-        val intent = Intent(this@HomeActivity, HomeActivity::class.java)
-        finish()
-        startActivity(intent)
-    }
-
     private fun mostrarInfoUsuario() {
         binding.tvUsername.text = "@$username"
         binding.tvName.text = name
@@ -164,7 +177,6 @@ class HomeActivity : AppCompatActivity() {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
                 val response = service.recuperarTweets(idUsuario)
-
                 runOnUiThread {
                     if(response.isNotEmpty()) {
                         tweets.clear()

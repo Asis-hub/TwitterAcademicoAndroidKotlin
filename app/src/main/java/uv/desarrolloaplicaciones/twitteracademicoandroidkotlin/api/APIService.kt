@@ -28,9 +28,15 @@ interface APIService {
     @POST("Seguidor")
     suspend fun seguirUsuario(@Body seguirUsuario: RequestBody): Seguidor
 
+    @DELETE("Seguidor")
+    suspend fun dejarSeguir(@Body dejarSeguirUsuario: RequestBody): Seguidor
+
     //Recupera una lista de los seguidores de un usuario definido
-    @GET("Seguidor/Seguido/{idUsuario}")
-    suspend fun recuperarSeguidores(@Path("idUsuario") idUsuario: Int): List<Seguidor>
+    @GET("Seguidor/{idUsuarioComparacion}/{idUsuario}")
+    suspend fun verificarSeguidor(@Path("idUsuario") idUsuario: Int,
+                                  @Path("idUsuarioComparacion") idUsuarioComparacion: Int): Seguidor
+
+
 
     //TWEETS
 
@@ -43,4 +49,7 @@ interface APIService {
     @Headers("Content-Type: application/json")
     @POST("Tweet")
     suspend fun registrarTweet(@Body nuevoTweet: RequestBody): Response<Tweet>
+
+    @DELETE("Tweet/{idTweet}")
+    suspend fun eliminarTweet(@Path("idTweet") idTweet: Int): Tweet
 }
