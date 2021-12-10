@@ -28,6 +28,7 @@ interface APIService {
     @POST("Seguidor")
     suspend fun seguirUsuario(@Body seguirUsuario: RequestBody): Seguidor
 
+    //Recupera una lista de los seguidores de un usuario definido
     @GET("Seguidor/Seguido/{idUsuario}")
     suspend fun recuperarSeguidores(@Path("idUsuario") idUsuario: Int): List<Seguidor>
 
