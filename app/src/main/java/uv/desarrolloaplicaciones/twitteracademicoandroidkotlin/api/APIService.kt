@@ -22,20 +22,27 @@ interface APIService {
 
     @Headers("Content-Type: application/json")
     @POST("Usuario")
-    suspend fun registrarUsuario(@Body nuevoUsuario: RequestBody): Response<Usuario>
+    suspend fun registrarUsuario(@Body nuevoUsuario: RequestBody): Usuario
+
+
 
     //SEGUIDOR
 
     @POST("Seguidor")
     suspend fun seguirUsuario(@Body seguirUsuario: RequestBody): Seguidor
 
-    @DELETE("Seguidor")
-    suspend fun dejarSeguir(@Body dejarSeguirUsuario: RequestBody): Seguidor
+    @DELETE("Seguidor/{idUsuario}/{idSeguidor}")
+    suspend fun dejarSeguir(
+        @Path("idUsuario") idUsuarioSeguido: Int,
+        @Path("idSeguidor") idUsuarioSeguidor: Int
+    ): Seguidor
 
     //Recupera una lista de los seguidores de un usuario definido
     @GET("Seguidor/{idUsuarioComparacion}/{idUsuario}")
-    suspend fun verificarSeguidor(@Path("idUsuario") idUsuario: Int,
-                                  @Path("idUsuarioComparacion") idUsuarioComparacion: Int): Seguidor
+    suspend fun verificarSeguidor(
+        @Path("idUsuario") idUsuario: Int,
+        @Path("idUsuarioComparacion") idUsuarioComparacion: Int
+    ): Seguidor
 
     @GET("Seguidores/{idUsuario}")
     suspend fun recuperarSeguidores(@Path("idUsuario") idUsuario: Int): List<Seguidor>

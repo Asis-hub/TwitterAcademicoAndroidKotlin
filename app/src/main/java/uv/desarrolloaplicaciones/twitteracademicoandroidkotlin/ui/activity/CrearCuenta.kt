@@ -10,12 +10,10 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.graphics.drawable.toBitmap
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
@@ -41,6 +39,10 @@ class CrearCuenta : AppCompatActivity() {
         binding = ActivityCrearCuentaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        cargarListener()
+    }
+
+    private fun cargarListener() {
         binding.ivSubirFoto.setOnClickListener {
             seleccionarImagen()
         }
@@ -52,13 +54,13 @@ class CrearCuenta : AppCompatActivity() {
             var apellidoPaterno = "apellidoPaterno"
             var apellidoMaterno = "apellidoMaterno"
             var fechaNacimiento: String = "${Calendar.getInstance().get(Calendar.YEAR)}-" +
-                                        "${Calendar.getInstance().get(Calendar.MONTH)}-" +
-                                        "${Calendar.getInstance().get(Calendar.DAY_OF_MONTH)}"
+                    "${Calendar.getInstance().get(Calendar.MONTH)}-" +
+                    "${Calendar.getInstance().get(Calendar.DAY_OF_MONTH)}"
             var email = "email"
             var nombreUsuario = "nombreusuario"
             var password = "password"
             var idTipoUsuario = 1
-            var fotoPerfil: Bitmap
+            //var fotoPerfil: Bitmap
 
             if (camposTextoLlenados()) {
                 nombre = binding.etName.text.toString()
@@ -68,7 +70,7 @@ class CrearCuenta : AppCompatActivity() {
                 email = binding.etEmail.text.toString()
                 nombreUsuario = binding.etUsername.text.toString()
                 password = binding.etPassword.text.toString()
-                fotoPerfil = binding.ivSubirFoto.drawable.toBitmap()
+                //fotoPerfil = binding.ivSubirFoto.drawable.toBitmap()
 
                 registrarUsuario(
                     nombre,
@@ -79,7 +81,7 @@ class CrearCuenta : AppCompatActivity() {
                     nombreUsuario,
                     password,
                     idTipoUsuario,
-                    fotoPerfil
+                    //fotoPerfil
                 )
             } else {
                 Toast.makeText(this, "Llena todos los campos de texto", Toast.LENGTH_SHORT).show()
@@ -139,7 +141,7 @@ class CrearCuenta : AppCompatActivity() {
     }
 
     private fun mostrarMensaje(mensaje: String) {
-
+        Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
     }
 
     private fun registrarUsuario(
@@ -151,12 +153,12 @@ class CrearCuenta : AppCompatActivity() {
         nombreUsuario: String,
         password: String,
         idTipoUsuario: Int,
-        fotoPerfil: Bitmap
+        //fotoPerfil: Bitmap
     ) {
 
         val json = JsonObject()
         json.addProperty("idUsuario", 0)
-        json.addProperty("FotoPerfil",bitmapToArray(fotoPerfil).contentToString())
+        json.addProperty("FotoPerfil","")
         json.addProperty("Nombre", nombre)
         json.addProperty("ApellidoPaterno", apellidoPaterno)
         json.addProperty("ApellidoMaterno", apellidoMaterno)
@@ -167,27 +169,24 @@ class CrearCuenta : AppCompatActivity() {
         json.addProperty("idTipoUsuario", idTipoUsuario)
 
         val jsonString = json.toString()
-        println(jsonString)
         val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-
-                withContext(Dispatchers.Main) {
-                    val response = service.registrarUsuario(requestBody)
-
-                    if (response.isSuccessful) {
+                println("Antes de la tragedia")
+                val response = service.registrarUsuario(requestBody)
+                println(response)
+                runOnUiThread {
+                    if (response.respuesta == "R") {
                         mostrarExito()
-                    } else {
-                        println(response.message())
-                        println(response.errorBody())
-                        mostrarError()
+                    } else if (response.respuesta == "N"){
+                        mostrarMensaje("Correo o nombre de usuario ya estan registrados")
                     }
 
                 }
             } catch (exception: Exception) {
-                println(exception.stackTrace)
+                exception.printStackTrace()
             }
         }
     }
@@ -198,6 +197,7 @@ class CrearCuenta : AppCompatActivity() {
 
     private fun mostrarExito() {
         Toast.makeText(this,"¡Cuenta creada!",Toast.LENGTH_SHORT).show()
+        finish()
     }
 
     private fun seleccionarImagen() {
