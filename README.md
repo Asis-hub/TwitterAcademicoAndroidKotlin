@@ -3,4 +3,4 @@
 - Dan Javier Olvera Villeda
 - Jose Carvajal Pacheco
 - Emilio Alarcon Santos
-- Reyes Ochoa Angel Asís
+- Angel Asís Reyes Ochoa
