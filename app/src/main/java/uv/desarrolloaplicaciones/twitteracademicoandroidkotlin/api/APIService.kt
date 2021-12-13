@@ -37,13 +37,14 @@ interface APIService {
         @Path("idSeguidor") idUsuarioSeguidor: Int
     ): Seguidor
 
-    //Recupera una lista de los seguidores de un usuario definido
+    //Verifica si un usuario sigue a otro
     @GET("Seguidor/{idUsuarioComparacion}/{idUsuario}")
     suspend fun verificarSeguidor(
         @Path("idUsuario") idUsuario: Int,
         @Path("idUsuarioComparacion") idUsuarioComparacion: Int
     ): Seguidor
 
+    //Recupera una lista de los seguidores de un usuario definido
     @GET("Seguidores/{idUsuario}")
     suspend fun recuperarSeguidores(@Path("idUsuario") idUsuario: Int): List<Seguidor>
 

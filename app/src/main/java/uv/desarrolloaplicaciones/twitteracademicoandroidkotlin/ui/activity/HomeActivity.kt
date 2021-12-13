@@ -28,6 +28,7 @@ class HomeActivity : AppCompatActivity() {
     private var idUsuario = 0
     private lateinit var name: String
     private lateinit var username: String
+    private var numSeguidores: Int = 0
 
     private lateinit var myToggle: ActionBarDrawerToggle
     private lateinit var myDrawerLayout: DrawerLayout
@@ -43,6 +44,51 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        recuperarDatosUsuario()
+
+        mostrarInfoUsuario()
+        initRecyclerview()
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
+        navigationView = findViewById(R.id.navigation_view_home)
+        myDrawerLayout = findViewById(R.id.drawerLayoutHome)
+        myToggle = ActionBarDrawerToggle(this,
+            myDrawerLayout,
+            R.string.open,
+            R.string.close)
+        myDrawerLayout.addDrawerListener(myToggle)
+        myToggle.syncState()
+
+        cargarListeners()
+
+        recuperarTweets()
+    }
+
+    private fun recuperarDatosUsuario() {
+        //Recuperando datos de usuarios transferidos de la ventana de inicio de sesión
+        val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+        idUsuario = sharedPreferences.getInt("id", 0)
+        name = sharedPreferences.getString("nombre","name").toString()
+        username = sharedPreferences.getString("nombreUsuario","username").toString()
+    }
+
+    private fun mostrarSeguidores(idUsuario: Int){
+        CoroutineScope(Dispatchers.IO).launch {
+            val service = ServiceBuilder.buildService(APIService::class.java)
+            val response = service.recuperarSeguidores(idUsuario)
+            println(response)
+            runOnUiThread {
+                if (response.isNotEmpty()) {
+                    binding.tvFollowers.text = "Numero de seguidores: ${response.size.toString()}"
+                }
+            }
+        }
+    }
+
+    private fun cargarListeners() {
         fun manageItemClick(menuItem: MenuItem): Boolean {
             var resultado = false
 
@@ -63,30 +109,6 @@ class HomeActivity : AppCompatActivity() {
         }
         binding.bottomNavigation.menu[0].setOnMenuItemClickListener(::manageItemClick)
         binding.bottomNavigation.menu[1].setOnMenuItemClickListener(::manageItemClick)
-
-        //Recuperando datos de usuarios transferidos de la ventana de inicio de sesión
-        val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
-        idUsuario = sharedPreferences.getInt("id", 0)
-        name = sharedPreferences.getString("nombre","name").toString()
-        username = sharedPreferences.getString("nombreUsuario","username").toString()
-
-        mostrarInfoUsuario()
-        initRecyclerview()
-
-        setSupportActionBar(binding.toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-
-        navigationView = findViewById(R.id.navigation_view_home)
-        myDrawerLayout = findViewById(R.id.drawerLayoutHome)
-        myToggle = ActionBarDrawerToggle(this,
-            myDrawerLayout,
-            R.string.open,
-            R.string.close)
-        myDrawerLayout.addDrawerListener(myToggle)
-        myToggle.syncState()
-
-
 
         binding.imageviewUserPhoto.setOnClickListener {
             if (myDrawerLayout.isDrawerOpen(navigationView)) {
@@ -128,7 +150,10 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        recuperarTweets()
+        binding.btnEditarPerfil.setOnClickListener {
+            val intent = Intent(this, EditarPerfilActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initRecyclerview() {
@@ -143,6 +168,7 @@ class HomeActivity : AppCompatActivity() {
         binding.tvUsername.text = "@$username"
         binding.tvName.text = name
         cargarFotoUsuario(buscarFotoUsuario(idUsuario))
+        mostrarSeguidores(idUsuario)
     }
 
     private fun buscarFotoUsuario(idUsuario: Int): Bitmap? {
