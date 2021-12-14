@@ -58,7 +58,7 @@ interface APIService {
     suspend fun recuperarTweets(): List<Tweet>
 
     @GET("Tweet/{id}")
-    suspend fun recuperarTweets(@Path("id") idUsuario: Int): List<Tweet>
+    suspend fun recuperarTweets(@Header("access-token") token: String, @Path("id") idUsuario: Int): List<Tweet>
 
     @GET("TweetPerfil/{id}")
     suspend fun recuperarTweetsPerfil(@Path("id") idUsuario: Int): List<Tweet>
