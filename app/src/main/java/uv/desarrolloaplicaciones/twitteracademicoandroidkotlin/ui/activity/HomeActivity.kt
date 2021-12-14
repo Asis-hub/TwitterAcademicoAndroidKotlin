@@ -82,7 +82,7 @@ class HomeActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.recuperarSeguidores(idUsuario)
+                val response = service.recuperarSeguidores(token, idUsuario)
                 runOnUiThread {
                     if (response.isNotEmpty()) {
                         binding.tvFollowers.text = "Numero de seguidores: ${response.size.toString()}"
@@ -156,7 +156,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerview() {
-        tweetsAdapter = TweetAdapter(this, tweets, idUsuario)
+        tweetsAdapter = TweetAdapter(this, tweets, idUsuario, token)
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.recyclerviewTweets.layoutManager = layoutManager
