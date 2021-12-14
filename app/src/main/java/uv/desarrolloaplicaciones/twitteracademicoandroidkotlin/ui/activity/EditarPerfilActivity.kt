@@ -25,6 +25,7 @@ class EditarPerfilActivity : AppCompatActivity() {
     private var idUsuario: Int = 0
     private lateinit var binding: ActivityEditarPerfilBinding
     private lateinit var infoUsuarioActual: Usuario
+    private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +41,7 @@ class EditarPerfilActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.getUsuario(idUsuario)
+                val response = service.getUsuario(token, idUsuario)
                 runOnUiThread {
                     infoUsuarioActual = response
                     if (response != null) {
@@ -146,7 +147,7 @@ class EditarPerfilActivity : AppCompatActivity() {
                 val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
 
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.modificarUsuario(idUsuario, requestBody)
+                val response = service.modificarUsuario(token, idUsuario, requestBody)
 
                 runOnUiThread {
                     println(response)
@@ -178,6 +179,7 @@ class EditarPerfilActivity : AppCompatActivity() {
         //Recuperando datos de usuarios transferidos de la ventana de inicio de sesión
         val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
         idUsuario = sharedPreferences.getInt("id", 0)
+        token = sharedPreferences.getString("token", "").toString()
     }
 
     private fun mostrarDialogoFecha() {

@@ -29,7 +29,6 @@ interface APIService {
                                  @Body nuevaInfoUsuario: RequestBody): Usuario
 
 
-
     //SEGUIDOR
 
     @POST("Seguidor")

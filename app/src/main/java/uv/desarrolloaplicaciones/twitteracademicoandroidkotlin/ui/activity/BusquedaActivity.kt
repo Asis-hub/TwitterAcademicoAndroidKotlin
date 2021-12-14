@@ -27,6 +27,7 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var username: String
     private var idUsuario: Int = 0
     private lateinit var name: String
+    private lateinit var token: String
 
     private lateinit var binding: ActivityBusquedaBinding
     private lateinit var tweetsAdapter: TweetAdapter
@@ -94,7 +95,7 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.recuperarSeguidores(idUsuario)
+                val response = service.recuperarSeguidores(token, idUsuario)
                 runOnUiThread {
                     if (response.isNotEmpty()) {
                         binding.tvFollowers.text = "Numero de seguidores: ${response.size.toString()}"
@@ -112,6 +113,7 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         idUsuario = sharedPreferences.getInt("id", 0)
         name = sharedPreferences.getString("nombre","name").toString()
         username = sharedPreferences.getString("nombreUsuario","username").toString()
+        token = sharedPreferences.getString("token","username").toString()
     }
 
     private fun initRecyclerView() {
@@ -133,7 +135,7 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.buscarTweetContenido(query)
+                val response = service.buscarTweetContenido(token, query)
 
                 runOnUiThread {
                     if(response.isNotEmpty()) {

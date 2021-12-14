@@ -26,6 +26,7 @@ class CrearTweet : AppCompatActivity() {
     private var idUsuario = 0
     private lateinit var name: String
     private lateinit var username: String
+    private lateinit var token: String
 
     private lateinit var binding: ActivityCrearTweetBinding
 
@@ -40,6 +41,7 @@ class CrearTweet : AppCompatActivity() {
         idUsuario = sharedPreferences.getInt("id", 0)
         name = sharedPreferences.getString("nombre","name").toString()
         username = sharedPreferences.getString("nombreUsuario","username").toString()
+        token = sharedPreferences.getString("token","").toString()
 
         println("idUsuario = $idUsuario\n" +
                 "name = $name\n" +
@@ -51,15 +53,7 @@ class CrearTweet : AppCompatActivity() {
             .error(R.drawable.default_photo)
             .into(binding.imgUserphoto)
         binding.btnTwittear.setOnClickListener{
-            if(binding.etCuerpotweet.text.toString().length == 0){
-                makeToast("Es necesario contenido para el Tweet")
-            }else{
-                if(binding.etCuerpotweet.text.toString().length > 280){
-                    makeToast("Maximo 280 caracteres para el cuerpo del Tweet")
-                }else{
-                    revisarTamañoTweet()
-                }
-            }
+            revisarTamañoTweet()
         }
         val close = findViewById<View>(R.id.toolbar)
         close.setOnClickListener {
@@ -101,7 +95,7 @@ class CrearTweet : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     println("toy aqui 0")
-                    val response = service.registrarTweet(requestBody)
+                    val response = service.registrarTweet(token, requestBody)
                     println("toy aqui")
                     if (response.isSuccessful) {
                         println("toy aqui 2")
