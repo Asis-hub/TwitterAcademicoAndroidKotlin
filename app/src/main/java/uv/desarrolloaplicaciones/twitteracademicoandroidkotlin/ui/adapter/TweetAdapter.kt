@@ -64,6 +64,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         private val options = itemView.findViewById<ImageView>(R.id.iv_moreOptions)
         private lateinit var tweet: Tweet
         private val sharedPreference = context.getSharedPreferences("USER_DATA",Context.MODE_PRIVATE)
+        private var token: String = sharedPreference.getString("token", "").toString()
 
         fun bind(tweet: Tweet) {
             this.tweet = tweet
@@ -82,11 +83,12 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         }
 
         private fun cargarLikes() {
+            //Recuperando datos de usuarios transferidos de la ventana de home
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
                     withContext(Dispatchers.Main) {
-                        val response = service.isLiked(tweet.idTweet, idUsuario)
+                        val response = service.isLiked(token, tweet.idTweet, idUsuario)
                         if(response.respuesta == "Y"){
                             marcarLike(true)
                         }else{
@@ -124,7 +126,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                     try {
                         val service = ServiceBuilder.buildService(APIService::class.java)
                         withContext(Dispatchers.Main) {
-                            val response = service.isLiked(tweet.idTweet, idUsuario)
+                            val response = service.isLiked(token, tweet.idTweet, idUsuario)
 
                             val json = JsonObject()
 
@@ -136,10 +138,10 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                             val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
 
                             if(response.respuesta == "Y"){
-                                service.quitarLike(tweet.idTweet, idUsuario)
+                                service.quitarLike(token, tweet.idTweet, idUsuario)
                                 marcarLike(false)
                             }else{
-                                service.darLike(requestBody)
+                                service.darLike(token, requestBody)
                                 marcarLike(true)
                             }
                         }
@@ -167,7 +169,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.verificarSeguidor(
+                    val response = service.verificarSeguidor(token,
                         sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
 
                     CoroutineScope(Dispatchers.Main).launch {
@@ -240,7 +242,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.eliminarTweet(idTweet)
+                    val response = service.eliminarTweet(token, idTweet)
                     CoroutineScope(Dispatchers.Main).launch {
                         if (response.respuesta == "Tweet eliminado") {
                             Toast.makeText(context,"Tweet eliminado con exito",Toast.LENGTH_SHORT).show()
@@ -267,7 +269,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.seguirUsuario(requestBody)
+                    val response = service.seguirUsuario(token, requestBody)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         if (response.respuesta == "Follow") {
@@ -289,7 +291,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.dejarSeguir(usuarioSeguido, usuarioSeguidor)
+                    val response = service.dejarSeguir(token, usuarioSeguido, usuarioSeguidor)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         if (response.respuesta == "Unfollow") {

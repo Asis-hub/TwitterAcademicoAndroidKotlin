@@ -3,6 +3,7 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.media.Image
+import android.media.Session2Token
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -39,6 +40,7 @@ class PerfilActivity : AppCompatActivity() {
     private var idUsuarioOriginal = 0
     private lateinit var nameOriginal: String
     private lateinit var usernameOriginal: String
+    private lateinit var token: String
 
     private lateinit var tweetsAdapter: TweetAdapter
     private var tweets = mutableListOf<Tweet>()
@@ -147,6 +149,7 @@ class PerfilActivity : AppCompatActivity() {
         idUsuarioOriginal = sharedPreferencesOriginal.getInt("id", 0)
         nameOriginal = sharedPreferencesOriginal.getString("nombre","name").toString()
         usernameOriginal = sharedPreferencesOriginal.getString("nombreUsuario","username").toString()
+        token = sharedPreferencesOriginal.getString("token","").toString()
     }
 
     private fun seguirUsuario(usuarioSeguidor: Int, usuarioASeguir: Int) {
@@ -160,7 +163,7 @@ class PerfilActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.seguirUsuario(requestBody)
+                val response = service.seguirUsuario(token, requestBody)
 
                 CoroutineScope(Dispatchers.Main).launch {
                     if (response.respuesta == "Follow") {
@@ -180,7 +183,7 @@ class PerfilActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.dejarSeguir(usuarioSeguido, usuarioSeguidor)
+                val response = service.dejarSeguir(token, usuarioSeguido, usuarioSeguidor)
 
                 CoroutineScope(Dispatchers.Main).launch {
                     if (response.respuesta == "Unfollow") {
@@ -209,7 +212,7 @@ class PerfilActivity : AppCompatActivity() {
         } else {
             CoroutineScope(Dispatchers.IO).launch {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.verificarSeguidor(idUsuarioOriginal, idUsuario)
+                val response = service.verificarSeguidor(token, idUsuarioOriginal, idUsuario)
 
                 runOnUiThread {
                     if (response.respuesta == "Y") {
@@ -244,7 +247,7 @@ class PerfilActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.recuperarSeguidores(idUsuario)
+                val response = service.recuperarSeguidores(token, idUsuario)
                 runOnUiThread {
                     if (response.isNotEmpty()) {
                         binding.tvFollowers.text = "Numero de seguidores: ${response.size.toString()}"
@@ -267,7 +270,7 @@ class PerfilActivity : AppCompatActivity() {
             try {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.recuperarTweetsPerfil(idUsuario)
+                val response = service.recuperarTweetsPerfil(token, idUsuario)
                 runOnUiThread {
                     if(response.isNotEmpty()) {
                         println(response)
