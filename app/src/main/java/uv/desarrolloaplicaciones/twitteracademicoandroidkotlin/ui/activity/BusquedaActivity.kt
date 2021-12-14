@@ -37,13 +37,21 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         binding = ActivityBusquedaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        recuperarDatosUsuario()
+        mostrarInfoUsuario()
+
+        cargarListeners()
+
+        initRecyclerView()
+    }
+
+    private fun cargarListeners() {
         fun manageItemClick(menuItem: MenuItem): Boolean {
             var resultado = false
 
             when(menuItem.itemId) {
                 R.id.action_home -> {
                     val intent = Intent(this, HomeActivity::class.java)
-                    finish()
                     startActivity(intent)
                 }
             }
@@ -52,18 +60,58 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         }
         binding.bottomNavigation.menu[0].setOnMenuItemClickListener(::manageItemClick)
 
+        binding.svBuscador.setOnQueryTextListener(this)
+
+        binding.tweetsRefreshLayout.setOnRefreshListener {
+            tweetsAdapter.actualizarTweets()
+        }
+
+        binding.navLogout.setOnClickListener {
+            val sharedPref = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+            sharedPref.edit().clear()
+            sharedPref.edit().commit()
+
+            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
+        binding.btnEditarPerfil.setOnClickListener {
+            val intent = Intent(this, EditarPerfilActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun mostrarInfoUsuario() {
+        binding.tvUsername.text = "@$username"
+        binding.tvName.text = name
+        //TODO dado que el metodo buscarFotoUsuario no funciona todavía, esto tampoco debería ser llamado
+        // cargarFotoUsuario(buscarFotoUsuario(idUsuario))
+        mostrarSeguidores(idUsuario)
+    }
+
+    private fun mostrarSeguidores(idUsuario: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val response = service.recuperarSeguidores(idUsuario)
+                runOnUiThread {
+                    if (response.isNotEmpty()) {
+                        binding.tvFollowers.text = "Numero de seguidores: ${response.size.toString()}"
+                    }
+                }
+            } catch (excepcion: Exception) {
+                println("Excepcion HOME_MOSTRAR_SEGUIDORES:")
+                excepcion.printStackTrace()
+            }
+        }
+    }
+
+    private fun recuperarDatosUsuario() {
         val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
         idUsuario = sharedPreferences.getInt("id", 0)
         name = sharedPreferences.getString("nombre","name").toString()
         username = sharedPreferences.getString("nombreUsuario","username").toString()
-
-        binding.svBuscador.setOnQueryTextListener(this)
-        binding.tweetsRefreshLayout.setOnRefreshListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            finish()
-            startActivity(intent)
-        }
-        initRecyclerView()
     }
 
     private fun initRecyclerView() {
