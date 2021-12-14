@@ -187,6 +187,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
                             <Button
+                                android:id="@+id/btn_editarPerfil"
                                 style="?android:attr/borderlessButtonStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
@@ -196,7 +197,7 @@
                                 android:drawableTint="?inverseColorLite"
                                 android:gravity="start|center_vertical"
                                 android:paddingStart="23dp"
-                                android:text="Profile"
+                                android:text="Editar perfil"
                                 android:textAlignment="textStart"
                                 android:textAllCaps="false"
                                 android:textColor="?attr/inverseColor"
@@ -259,7 +260,7 @@
                                 android:layout_gravity="start"
                                 android:gravity="start|center_vertical"
                                 android:paddingLeft="23dp"
-                                android:text="Log out"
+                                android:text="Cerrar sesión"
                                 android:textAlignment="textStart"
                                 android:textAllCaps="false"
                                 android:textColor="#C41010"
