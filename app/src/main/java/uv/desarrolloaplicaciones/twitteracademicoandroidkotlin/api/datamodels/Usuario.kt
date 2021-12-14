@@ -24,5 +24,7 @@ data class Usuario(
     @SerializedName("idTipoUsuario")
     var idTipoUsuario: Int,
     @SerializedName("Respuesta")
-    var respuesta: String
+    var respuesta: String,
+    @SerializedName("Token")
+    var token: String
 )

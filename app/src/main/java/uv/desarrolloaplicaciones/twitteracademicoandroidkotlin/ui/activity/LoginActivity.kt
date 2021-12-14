@@ -91,6 +91,8 @@ class LoginActivity : AppCompatActivity() {
         editor.putInt("id", body.idUsuario)
         editor.putString("nombre", body.nombre)
         editor.putString("nombreUsuario", body.nombreUsuario)
+        editor.putString("token", body.token)
+        editor.putInt("tipoUsuario", body.idTipoUsuario)
         editor.apply()
 
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
