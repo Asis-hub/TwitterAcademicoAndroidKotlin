@@ -178,7 +178,7 @@ class CrearCuenta : AppCompatActivity() {
                 val response = service.registrarUsuario(requestBody)
                 println(response)
                 runOnUiThread {
-                    if (response.respuesta == "R") {
+                    if (response.respuesta == "Y") {
                         mostrarExito()
                     } else if (response.respuesta == "N"){
                         mostrarMensaje("Correo o nombre de usuario ya estan registrados")
