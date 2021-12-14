@@ -67,17 +67,17 @@ class LoginActivity : AppCompatActivity() {
                 val service = ServiceBuilder.buildService(APIService::class.java)
                 val response = service.logearse(requestBody)
                 runOnUiThread {
-                    if (response.respuesta == "Logeado" ) {
+                    if (response.respuesta == "Y" ) {
                         mostrarMensaje("¡Bienvenido!")
                         irAPantallaPrincipal(response)
-                    } else if(response.respuesta == "Favor de verificar su informacion"){
+                    } else if(response.respuesta == "N"){
                         mostrarMensaje("No existe un usuario con ese usuario y/o contraseña")
                     }
                 }
             } catch (exception: Exception) {
-                println("Excepcion:")
-                mostrarMensaje(resources.getString(R.string.mensajeError))
+                println("Excepcion LOGEARSE:")
                 exception.printStackTrace()
+                mostrarMensaje(resources.getString(R.string.mensajeError))
             }
         }
     }
@@ -91,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
         editor.putInt("id", body.idUsuario)
         editor.putString("nombre", body.nombre)
         editor.putString("nombreUsuario", body.nombreUsuario)
-        editor.commit()
+        editor.apply()
 
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)

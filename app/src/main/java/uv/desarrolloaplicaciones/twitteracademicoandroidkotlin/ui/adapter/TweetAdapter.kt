@@ -2,19 +2,18 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.PorterDuff
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,8 +24,6 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.EditarPerfilActivity
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.PerfilActivity
 
 class TweetAdapter(internal var context: Context, private var tweets: MutableList<Tweet>, private var idUsuario: Int) : androidx.recyclerview.widget.RecyclerView.Adapter<TweetAdapter.ViewHolder>() {
@@ -97,6 +94,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         }
                     }
                 } catch (exception: Exception) {
+                    println("Exception ADAPTER_CARGAR_LIKE:")
                     exception.printStackTrace()
                 }
             }
@@ -146,6 +144,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                             }
                         }
                     } catch (exception: Exception) {
+                        println("Excepcion ADAPTER_DAR_LIKE")
                         exception.printStackTrace()
                     }
                 }
@@ -155,7 +154,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         private fun marcarLike(isLiked: Boolean) {
             if(isLiked){
                 like.setImageResource(R.drawable.ic_twitter_like)
-                like.setColorFilter(ContextCompat.getColor(context, R.color.red_like), android.graphics.PorterDuff.Mode.MULTIPLY)
+                like.setColorFilter(ContextCompat.getColor(context, R.color.twitter_red), android.graphics.PorterDuff.Mode.MULTIPLY)
             }else{
                 like.setImageResource(R.drawable.ic_twitter_like_outline)
             }
@@ -181,6 +180,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         }
                     }
                 }catch (exception: Exception) {
+                    println("Excepcion ADAPTER_CARGAR_MENU:")
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
             }
@@ -205,12 +205,37 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                     dejarSeguirUsuario(sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
                 }
                 context.resources.getString(R.string.borrar_tweet) -> {
-                    borrarTweet(tweet.idTweet)
+                    confirmacionBorrarTweet()
                 }
             }
 
             return resultado
         }
+
+        private fun confirmacionBorrarTweet() {
+            val alertDialog: AlertDialog? = context?.let {
+                val builder = AlertDialog.Builder(it)
+
+                builder?.setTitle("¡PRECAUCIÓN!")
+                builder?.setMessage("Si borra el tweet no se podrá revertir " +
+                        "¿Esta seguro de realizar esto?")
+
+                builder.apply {
+                    setPositiveButton("Aceptar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            // Clic en aceptar
+                            borrarTweet(tweet.idTweet)
+                        })
+                    setNegativeButton("Cancelar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            // Clic en cancelar
+                        })
+                }
+
+                builder.show()
+            }
+        }
+
         private fun borrarTweet(idTweet: Int) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -225,6 +250,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         actualizarTweets()
                     }
                 } catch (exception: Exception) {
+                    println("Excepcion ADAPTER_BORRAR_TWEET:")
                     exception.printStackTrace()
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
@@ -253,6 +279,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         actualizarTweets()
                     }
                 } catch (exception: Exception) {
+                    println("Excepcion ADAPTER_SEGUIR_USUARIO:")
                     exception.printStackTrace()
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
@@ -274,6 +301,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         actualizarTweets()
                     }
                 } catch (exception: Exception) {
+                    println("Excepcion ADAPTER_DEJAR_SEGUIR_USUARIO:")
                     exception.printStackTrace()
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }

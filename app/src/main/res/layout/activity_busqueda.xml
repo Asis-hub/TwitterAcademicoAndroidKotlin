@@ -67,7 +67,7 @@
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_view"
+            android:id="@+id/navigation_view_home"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
@@ -88,22 +88,29 @@
                         android:background="@android:color/transparent"
                         android:padding="10dp">
 
-                        <ImageView
-                            android:id="@+id/imageview_user_photo_nav"
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_iv_user_photo_nav"
                             android:layout_width="70dp"
                             android:layout_height="70dp"
+                            app:cardCornerRadius="100dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginBottom="10dp"
-                            app:placeholderImage="@drawable/default_photo"
-                            app:roundAsCircle="true" />
+                            android:layout_marginBottom="10dp">
+
+                            <ImageView
+                                android:id="@+id/imageview_user_photo_nav"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/default_photo"/>
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:id="@+id/tv_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/imageview_user_photo_nav"
+                            android:layout_below="@id/card_iv_user_photo_nav"
                             android:layout_marginStart="10dp"
                             android:text="{user.name}"
                             android:textColor="?inverseColor"
@@ -146,16 +153,17 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
                             <Button
+                                android:id="@+id/btn_editarPerfil"
                                 style="?android:attr/borderlessButtonStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:layout_gravity="start"
-                                android:drawableStart="@drawable/ic_twitter_like_outline"
+                                android:drawableStart="@drawable/ic_profile_config"
                                 android:drawablePadding="15dp"
                                 android:drawableTint="?inverseColorLite"
                                 android:gravity="start|center_vertical"
                                 android:paddingStart="23dp"
-                                android:text="Profile"
+                                android:text="Editar perfil"
                                 android:textAlignment="textStart"
                                 android:textAllCaps="false"
                                 android:textColor="?attr/inverseColor"
@@ -218,7 +226,7 @@
                                 android:layout_gravity="start"
                                 android:gravity="start|center_vertical"
                                 android:paddingLeft="23dp"
-                                android:text="Log out"
+                                android:text="Cerrar sesión"
                                 android:textAlignment="textStart"
                                 android:textAllCaps="false"
                                 android:textColor="#C41010"
@@ -249,10 +257,16 @@
                 </RelativeLayout>
 
 
+
+
+
+
+
             </RelativeLayout>
 
 
         </com.google.android.material.navigation.NavigationView>
+
 
 
     </androidx.drawerlayout.widget.DrawerLayout>

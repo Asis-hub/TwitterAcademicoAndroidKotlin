@@ -28,6 +28,7 @@ class HomeActivity : AppCompatActivity() {
     private var idUsuario = 0
     private lateinit var name: String
     private lateinit var username: String
+    private var numSeguidores: Int = 0
 
     private lateinit var myToggle: ActionBarDrawerToggle
     private lateinit var myDrawerLayout: DrawerLayout
@@ -43,6 +44,56 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        recuperarDatosUsuario()
+        mostrarInfoUsuario()
+
+        cargarListeners()
+
+        initRecyclerview()
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
+        navigationView = findViewById(R.id.navigation_view_home)
+        myDrawerLayout = findViewById(R.id.drawerLayoutHome)
+        myToggle = ActionBarDrawerToggle(this,
+            myDrawerLayout,
+            R.string.open,
+            R.string.close)
+        myDrawerLayout.addDrawerListener(myToggle)
+        myToggle.syncState()
+
+        recuperarTweets()
+    }
+
+    private fun recuperarDatosUsuario() {
+        //Recuperando datos de usuarios transferidos de la ventana de inicio de sesión
+        val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+        idUsuario = sharedPreferences.getInt("id", 0)
+        name = sharedPreferences.getString("nombre","name").toString()
+        println(name)
+        username = sharedPreferences.getString("nombreUsuario","username").toString()
+    }
+
+    private fun mostrarSeguidores(idUsuario: Int){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val response = service.recuperarSeguidores(idUsuario)
+                runOnUiThread {
+                    if (response.isNotEmpty()) {
+                        binding.tvFollowers.text = "Numero de seguidores: ${response.size.toString()}"
+                    }
+                }
+            } catch (excepcion: Exception) {
+                println("Excepcion HOME_MOSTRAR_SEGUIDORES:")
+                excepcion.printStackTrace()
+            }
+        }
+    }
+
+    private fun cargarListeners() {
         fun manageItemClick(menuItem: MenuItem): Boolean {
             var resultado = false
 
@@ -64,30 +115,6 @@ class HomeActivity : AppCompatActivity() {
         binding.bottomNavigation.menu[0].setOnMenuItemClickListener(::manageItemClick)
         binding.bottomNavigation.menu[1].setOnMenuItemClickListener(::manageItemClick)
 
-        //Recuperando datos de usuarios transferidos de la ventana de inicio de sesión
-        val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
-        idUsuario = sharedPreferences.getInt("id", 0)
-        name = sharedPreferences.getString("nombre","name").toString()
-        username = sharedPreferences.getString("nombreUsuario","username").toString()
-
-        mostrarInfoUsuario()
-        initRecyclerview()
-
-        setSupportActionBar(binding.toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-
-        navigationView = findViewById(R.id.navigation_view_home)
-        myDrawerLayout = findViewById(R.id.drawerLayoutHome)
-        myToggle = ActionBarDrawerToggle(this,
-            myDrawerLayout,
-            R.string.open,
-            R.string.close)
-        myDrawerLayout.addDrawerListener(myToggle)
-        myToggle.syncState()
-
-
-
         binding.imageviewUserPhoto.setOnClickListener {
             if (myDrawerLayout.isDrawerOpen(navigationView)) {
                 myDrawerLayout.closeDrawer(navigationView)
@@ -102,7 +129,7 @@ class HomeActivity : AppCompatActivity() {
             sharedPref.edit().commit()
 
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this@HomeActivity, MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
@@ -124,11 +151,15 @@ class HomeActivity : AppCompatActivity() {
         // refresca la activity
         binding.tweetsRefreshLayout.setOnRefreshListener {
             val intent = Intent(this, HomeActivity::class.java)
+
             finish()
             startActivity(intent)
         }
 
-        recuperarTweets()
+        binding.btnEditarPerfil.setOnClickListener {
+            val intent = Intent(this, EditarPerfilActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initRecyclerview() {
@@ -142,22 +173,25 @@ class HomeActivity : AppCompatActivity() {
     private fun mostrarInfoUsuario() {
         binding.tvUsername.text = "@$username"
         binding.tvName.text = name
-        cargarFotoUsuario(buscarFotoUsuario(idUsuario))
+        //TODO dado que el metodo buscarFotoUsuario no funciona todavía, esto tampoco debería ser llamado
+        // cargarFotoUsuario(buscarFotoUsuario(idUsuario))
+        mostrarSeguidores(idUsuario)
     }
-
+    //TODO Este metodo no funciona todavía, falta saber como guardar y recuperar imagenes de
+    // base de datos usando la api
     private fun buscarFotoUsuario(idUsuario: Int): Bitmap? {
         var fotoUsuario: Bitmap? = null
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-
-                val img: ByteArray? = service.getUsuario(idUsuario).fotoPerfil
+                //val img: ByteArray? = service.getUsuario(idUsuario).fotoPerfil
                 //Si el usuario tiene una foto de perfil...
-                if(img != null) {
-                    fotoUsuario = BitmapFactory.decodeByteArray(img,0,img.size)
-                }
+                //if(img != null) {
+                  //  fotoUsuario = BitmapFactory.decodeByteArray(img,0,img.size)
+                //}
             } catch (exception: Exception) {
+                println("Excepcion HOME_BUSCAR_FOTO_USUARIO:")
                 exception.printStackTrace()
             }
         }
@@ -178,12 +212,10 @@ class HomeActivity : AppCompatActivity() {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
                 val response = service.recuperarTweets(idUsuario)
-                println(response)
                 runOnUiThread {
                     if(response.isNotEmpty()) {
                         tweets.clear()
                         tweets.addAll(response)
-                        println(response)
                         tweetsAdapter.actualizarTweets(tweets)
                     } else {
                         mostrarMensaje("¡No hay tweets! Sigue a alguien o haz un tweet")
@@ -191,6 +223,7 @@ class HomeActivity : AppCompatActivity() {
                 }
 
             } catch (excep: Exception) {
+                println("Exception HOME_RECUPERAR_TWEETS:")
                 excep.printStackTrace()
                 binding.tweetsRefreshLayout.isRefreshing = false
                 mostrarMensaje("Hubo un error al tratar de cargar la pagina, vuelva a intentarlo más tarde")
