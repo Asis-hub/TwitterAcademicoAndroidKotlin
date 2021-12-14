@@ -26,6 +26,7 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter.TweetA
 class HomeActivity : AppCompatActivity() {
 
     private var idUsuario = 0
+    private lateinit var token: String
     private lateinit var name: String
     private lateinit var username: String
     private var numSeguidores: Int = 0
@@ -74,6 +75,7 @@ class HomeActivity : AppCompatActivity() {
         name = sharedPreferences.getString("nombre","name").toString()
         println(name)
         username = sharedPreferences.getString("nombreUsuario","username").toString()
+        token = sharedPreferences.getString("token","").toString()
     }
 
     private fun mostrarSeguidores(idUsuario: Int){
@@ -135,15 +137,6 @@ class HomeActivity : AppCompatActivity() {
 
         binding.fabCompose.setOnClickListener {
             val intent = Intent(this, CrearTweet::class.java)
-
-            //Comparte algunos datos del usuario para usarlos en la siguiente activity (CrearTweet)
-            val sharedPref = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
-            var editor = sharedPref.edit()
-            editor.putInt("id", idUsuario)
-            editor.putString("nombre", name)
-            editor.putString("nombreUsuario", username)
-            editor.commit()
-
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
         }
@@ -211,7 +204,7 @@ class HomeActivity : AppCompatActivity() {
             try {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.recuperarTweets(idUsuario)
+                val response = service.recuperarTweets(token, idUsuario)
                 runOnUiThread {
                     if(response.isNotEmpty()) {
                         tweets.clear()
