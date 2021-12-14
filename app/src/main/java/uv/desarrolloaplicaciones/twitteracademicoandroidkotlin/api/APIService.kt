@@ -24,6 +24,10 @@ interface APIService {
     @POST("Usuario")
     suspend fun registrarUsuario(@Body nuevoUsuario: RequestBody): Usuario
 
+    @PUT("Usuario/{idUsuario}")
+    suspend fun modificarUsuario(@Path("idUsuario") idUsuario: Int,
+                                 @Body nuevaInfoUsuario: RequestBody): Usuario
+
 
 
     //SEGUIDOR
