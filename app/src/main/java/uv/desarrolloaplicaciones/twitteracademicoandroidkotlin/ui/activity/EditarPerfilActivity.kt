@@ -2,6 +2,7 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -118,13 +119,30 @@ class EditarPerfilActivity : AppCompatActivity() {
         // borrado lógico
         CoroutineScope(Dispatchers.IO).launch {
             try {
-
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val response = service.eliminarUsuario(token, idUsuario)
+                runOnUiThread {
+                    if (response.respuesta == "Y") {
+                        mostrarMensaje("Usuario eliminado")
+                        volverAInicio()
+                    } else if (response.respuesta == "N") {
+                        mostrarMensaje("No se pudo eliminar el usuario, intentelo más tarde")
+                    }
+                }
             } catch (excepcion: Exception) {
                 println("Excepcion EDITARPERFIL_ELIMINAR:")
                 excepcion.printStackTrace()
                 mostrarMensaje(resources.getString(R.string.mensajeError))
             }
         }
+    }
+
+    private fun volverAInicio() {
+        val intent = Intent(this, MainActivity::class.java)
+        val sharedPref = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+        sharedPref.edit().clear().apply()
+        finish()
+        startActivity(intent)
     }
 
     private fun editarPerfil() {

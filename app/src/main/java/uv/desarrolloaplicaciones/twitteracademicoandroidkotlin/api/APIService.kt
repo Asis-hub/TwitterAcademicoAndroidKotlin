@@ -28,7 +28,10 @@ interface APIService {
     suspend fun modificarUsuario(@Header("access-token") token: String, @Path("idUsuario") idUsuario: Int,
                                  @Body nuevaInfoUsuario: RequestBody): Usuario
 
-
+    @DELETE("Usuario/{idUsuario}")
+    suspend fun eliminarUsuario(@Header("access-token") token: String,
+                                @Path("idUsuario") idUsuario: Int): Usuario
+    
     //SEGUIDOR
 
     @POST("Seguidor")
