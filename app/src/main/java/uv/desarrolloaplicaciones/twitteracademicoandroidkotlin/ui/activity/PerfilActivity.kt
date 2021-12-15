@@ -3,6 +3,7 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.media.Image
+import android.media.Session2Token
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -39,6 +40,7 @@ class PerfilActivity : AppCompatActivity() {
     private var idUsuarioOriginal = 0
     private lateinit var nameOriginal: String
     private lateinit var usernameOriginal: String
+    private lateinit var token: String
 
     private lateinit var tweetsAdapter: TweetAdapter
     private var tweets = mutableListOf<Tweet>()
@@ -50,16 +52,21 @@ class PerfilActivity : AppCompatActivity() {
         binding = ActivityPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sharedPreferences = getSharedPreferences("OTHER_USER_DATA", Context.MODE_PRIVATE)
-        idUsuario = sharedPreferences.getInt("id", 0)
-        name = sharedPreferences.getString("nombre","name").toString()
-        username = sharedPreferences.getString("nombreUsuario","username").toString()
+        recuperarDatosUsuario()
+        mostrarInfoUsuario()
 
-        val sharedPreferencesOriginal = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
-        idUsuarioOriginal = sharedPreferencesOriginal.getInt("id", 0)
-        nameOriginal = sharedPreferencesOriginal.getString("nombre","name").toString()
-        usernameOriginal = sharedPreferencesOriginal.getString("nombreUsuario","username").toString()
+        cargarListeners()
 
+        initRecyclerview()
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
+        recuperarTweets()
+    }
+
+    private fun cargarListeners() {
         fun manageItemClick(menuItem: MenuItem): Boolean {
             var resultado = false
 
@@ -80,15 +87,6 @@ class PerfilActivity : AppCompatActivity() {
         }
         binding.bottomNavigation.menu[0].setOnMenuItemClickListener(::manageItemClick)
         binding.bottomNavigation.menu[1].setOnMenuItemClickListener(::manageItemClick)
-
-        initBotonSeguir(idUsuario, idUsuarioOriginal)
-        mostrarInfoUsuario()
-        llenarCampoPantallaPerfil()
-        initRecyclerview()
-
-        setSupportActionBar(binding.toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
         binding.navLogout.setOnClickListener {
             val sharedPref = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
@@ -120,6 +118,10 @@ class PerfilActivity : AppCompatActivity() {
             recuperarTweets()
         }
 
+        binding.btnEditarPerfil.setOnClickListener {
+            val intent = Intent(this, EditarPerfilActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.btnVolverPerfil.setOnClickListener{
             val sharedPref = getSharedPreferences("OTHER_USER_DATA", Context.MODE_PRIVATE)
@@ -135,8 +137,19 @@ class PerfilActivity : AppCompatActivity() {
                 seguirUsuario(idUsuarioOriginal,idUsuario)
             }
         }
+    }
 
-        recuperarTweets()
+    private fun recuperarDatosUsuario() {
+        val sharedPreferences = getSharedPreferences("OTHER_USER_DATA", Context.MODE_PRIVATE)
+        idUsuario = sharedPreferences.getInt("id", 0)
+        name = sharedPreferences.getString("nombre","name").toString()
+        username = sharedPreferences.getString("nombreUsuario","username").toString()
+
+        val sharedPreferencesOriginal = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+        idUsuarioOriginal = sharedPreferencesOriginal.getInt("id", 0)
+        nameOriginal = sharedPreferencesOriginal.getString("nombre","name").toString()
+        usernameOriginal = sharedPreferencesOriginal.getString("nombreUsuario","username").toString()
+        token = sharedPreferencesOriginal.getString("token","").toString()
     }
 
     private fun seguirUsuario(usuarioSeguidor: Int, usuarioASeguir: Int) {
@@ -150,7 +163,7 @@ class PerfilActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.seguirUsuario(requestBody)
+                val response = service.seguirUsuario(token, requestBody)
 
                 CoroutineScope(Dispatchers.Main).launch {
                     if (response.respuesta == "Follow") {
@@ -170,7 +183,7 @@ class PerfilActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.dejarSeguir(usuarioSeguido, usuarioSeguidor)
+                val response = service.dejarSeguir(token, usuarioSeguido, usuarioSeguidor)
 
                 CoroutineScope(Dispatchers.Main).launch {
                     if (response.respuesta == "Unfollow") {
@@ -199,7 +212,7 @@ class PerfilActivity : AppCompatActivity() {
         } else {
             CoroutineScope(Dispatchers.IO).launch {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.verificarSeguidor(idUsuarioOriginal, idUsuario)
+                val response = service.verificarSeguidor(token, idUsuarioOriginal, idUsuario)
 
                 runOnUiThread {
                     if (response.respuesta == "Y") {
@@ -223,8 +236,28 @@ class PerfilActivity : AppCompatActivity() {
     }
 
     private fun mostrarInfoUsuario(){
-        binding.tvUsername.text = "$usernameOriginal"
+        binding.tvUsername.text = "@$usernameOriginal"
         binding.tvName.text = nameOriginal
+        initBotonSeguir(idUsuario, idUsuarioOriginal)
+        llenarCampoPantallaPerfil()
+        mostrarSeguidores(idUsuarioOriginal)
+    }
+
+    private fun mostrarSeguidores(idUsuario: Int){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val response = service.recuperarSeguidores(token, idUsuario)
+                runOnUiThread {
+                    if (response.isNotEmpty()) {
+                        binding.tvFollowers.text = "Numero de seguidores: ${response.size.toString()}"
+                    }
+                }
+            } catch (excepcion: Exception) {
+                println("Excepcion PERFIL_MOSTRAR_SEGUIDORES:")
+                excepcion.printStackTrace()
+            }
+        }
     }
 
     private fun llenarCampoPantallaPerfil() {
@@ -237,10 +270,10 @@ class PerfilActivity : AppCompatActivity() {
             try {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.recuperarTweetsPerfil(idUsuario)
-
+                val response = service.recuperarTweetsPerfil(token, idUsuario)
                 runOnUiThread {
                     if(response.isNotEmpty()) {
+                        println(response)
                         tweets.clear()
                         tweets.addAll(response)
                         tweetsAdapter.actualizarTweets(tweets)

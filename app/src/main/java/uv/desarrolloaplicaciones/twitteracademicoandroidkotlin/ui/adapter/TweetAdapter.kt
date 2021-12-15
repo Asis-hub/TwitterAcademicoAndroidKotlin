@@ -2,19 +2,18 @@ package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.PorterDuff
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,8 +24,7 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
-import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.EditarPerfilActivity
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.EditarTweetActivity
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.PerfilActivity
 
 class TweetAdapter(internal var context: Context, private var tweets: MutableList<Tweet>, private var idUsuario: Int) : androidx.recyclerview.widget.RecyclerView.Adapter<TweetAdapter.ViewHolder>() {
@@ -42,9 +40,6 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         holder.bind(item)
     }
     fun actualizarTweets() {
-        val temporal = tweets
-        tweets.clear()
-        tweets.addAll(temporal)
         notifyDataSetChanged()
     }
 
@@ -70,12 +65,13 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         private val options = itemView.findViewById<ImageView>(R.id.iv_moreOptions)
         private lateinit var tweet: Tweet
         private val sharedPreference = context.getSharedPreferences("USER_DATA",Context.MODE_PRIVATE)
+        private var token: String = sharedPreference.getString("token", "").toString()
 
         fun bind(tweet: Tweet) {
             this.tweet = tweet
 
             cargarLikes();
-            cargarListeners()
+            cargarListeners(tweet)
             //Menu que aparece al hace clic en el icono de los tres puntos
             cargarPopupMenu()
             cargarFotoPerfil()
@@ -88,11 +84,12 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         }
 
         private fun cargarLikes() {
+            //Recuperando datos de usuarios transferidos de la ventana de home
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
                     withContext(Dispatchers.Main) {
-                        val response = service.isLiked(tweet.idTweet, idUsuario)
+                        val response = service.isLiked(token, tweet.idTweet, idUsuario)
                         if(response.respuesta == "Y"){
                             marcarLike(true)
                         }else{
@@ -100,12 +97,13 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         }
                     }
                 } catch (exception: Exception) {
+                    println("Exception ADAPTER_CARGAR_LIKE:")
                     exception.printStackTrace()
                 }
             }
         }
 
-        private fun cargarListeners() {
+        private fun cargarListeners(tweet: Tweet) {
             foto.setOnClickListener{
                 val intent = Intent(context,PerfilActivity::class.java)
 
@@ -121,7 +119,9 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             }
 
             editTweet.setOnClickListener {
-                //TODO Editar tweet
+                val intent = Intent(context, EditarTweetActivity::class.java)
+                sharedPreference.edit().putInt("idTweet", tweet.idTweet).apply()
+                startActivity(context, intent, null)
             }
 
             like.setOnClickListener{
@@ -129,7 +129,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                     try {
                         val service = ServiceBuilder.buildService(APIService::class.java)
                         withContext(Dispatchers.Main) {
-                            val response = service.isLiked(tweet.idTweet, idUsuario)
+                            val response = service.isLiked(token, tweet.idTweet, idUsuario)
 
                             val json = JsonObject()
 
@@ -141,14 +141,15 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                             val requestBody = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
 
                             if(response.respuesta == "Y"){
-                                service.quitarLike(tweet.idTweet, idUsuario)
+                                service.quitarLike(token, tweet.idTweet, idUsuario)
                                 marcarLike(false)
                             }else{
-                                service.darLike(requestBody)
+                                service.darLike(token, requestBody)
                                 marcarLike(true)
                             }
                         }
                     } catch (exception: Exception) {
+                        println("Excepcion ADAPTER_DAR_LIKE")
                         exception.printStackTrace()
                     }
                 }
@@ -158,7 +159,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         private fun marcarLike(isLiked: Boolean) {
             if(isLiked){
                 like.setImageResource(R.drawable.ic_twitter_like)
-                like.setColorFilter(ContextCompat.getColor(context, R.color.red_like), android.graphics.PorterDuff.Mode.MULTIPLY)
+                like.setColorFilter(ContextCompat.getColor(context, R.color.twitter_red), android.graphics.PorterDuff.Mode.MULTIPLY)
             }else{
                 like.setImageResource(R.drawable.ic_twitter_like_outline)
             }
@@ -171,7 +172,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.verificarSeguidor(
+                    val response = service.verificarSeguidor(token,
                         sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
 
                     CoroutineScope(Dispatchers.Main).launch {
@@ -184,6 +185,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         }
                     }
                 }catch (exception: Exception) {
+                    println("Excepcion ADAPTER_CARGAR_MENU:")
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
             }
@@ -208,17 +210,42 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                     dejarSeguirUsuario(sharedPreference.getInt("id", 0), tweet.tuiteadoPor)
                 }
                 context.resources.getString(R.string.borrar_tweet) -> {
-                    borrarTweet(tweet.idTweet)
+                    confirmacionBorrarTweet()
                 }
             }
 
             return resultado
         }
+
+        private fun confirmacionBorrarTweet() {
+            val alertDialog: AlertDialog? = context?.let {
+                val builder = AlertDialog.Builder(it)
+
+                builder?.setTitle("¡PRECAUCIÓN!")
+                builder?.setMessage("Si borra el tweet no se podrá revertir " +
+                        "¿Esta seguro de realizar esto?")
+
+                builder.apply {
+                    setPositiveButton("Aceptar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            // Clic en aceptar
+                            borrarTweet(tweet.idTweet)
+                        })
+                    setNegativeButton("Cancelar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            // Clic en cancelar
+                        })
+                }
+
+                builder.show()
+            }
+        }
+
         private fun borrarTweet(idTweet: Int) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.eliminarTweet(idTweet)
+                    val response = service.eliminarTweet(token, idTweet)
                     CoroutineScope(Dispatchers.Main).launch {
                         if (response.respuesta == "Tweet eliminado") {
                             Toast.makeText(context,"Tweet eliminado con exito",Toast.LENGTH_SHORT).show()
@@ -228,6 +255,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         actualizarTweets()
                     }
                 } catch (exception: Exception) {
+                    println("Excepcion ADAPTER_BORRAR_TWEET:")
                     exception.printStackTrace()
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
@@ -244,7 +272,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.seguirUsuario(requestBody)
+                    val response = service.seguirUsuario(token, requestBody)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         if (response.respuesta == "Follow") {
@@ -256,6 +284,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         actualizarTweets()
                     }
                 } catch (exception: Exception) {
+                    println("Excepcion ADAPTER_SEGUIR_USUARIO:")
                     exception.printStackTrace()
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
@@ -265,7 +294,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val service = ServiceBuilder.buildService(APIService::class.java)
-                    val response = service.dejarSeguir(usuarioSeguido, usuarioSeguidor)
+                    val response = service.dejarSeguir(token, usuarioSeguido, usuarioSeguidor)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         if (response.respuesta == "Unfollow") {
@@ -277,6 +306,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
                         actualizarTweets()
                     }
                 } catch (exception: Exception) {
+                    println("Excepcion ADAPTER_DEJAR_SEGUIR_USUARIO:")
                     exception.printStackTrace()
                     mostrarMensaje(context.resources.getString(R.string.mensajeError))
                 }
