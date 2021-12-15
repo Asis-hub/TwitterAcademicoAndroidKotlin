@@ -1,5 +1,6 @@
 package uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +29,13 @@ class EditarPerfilActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditarPerfilBinding
     private lateinit var infoUsuarioActual: Usuario
     private lateinit var token: String
+    private var activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            binding.ivSubirFoto.setImageURI(data?.data)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,13 +73,11 @@ class EditarPerfilActivity : AppCompatActivity() {
         }
     }
 
-    private fun mostrarMensaje(mensaje: String) {
-        runOnUiThread {
-            Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun cargarListeners() {
+        binding.ivSubirFoto.setOnClickListener {
+            seleccionarImagen()
+        }
+
         binding.tfFecNac.setOnClickListener {
             mostrarDialogoFecha()
         }
@@ -85,6 +92,17 @@ class EditarPerfilActivity : AppCompatActivity() {
 
         binding.btnEliminar.setOnClickListener {
             confirmacionEliminarUsuario()
+        }
+    }
+
+    private fun seleccionarImagen() {
+        var intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        activityResultLauncher.launch(intent)
+    }
+
+    private fun mostrarMensaje(mensaje: String) {
+        runOnUiThread {
+            Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -114,9 +132,6 @@ class EditarPerfilActivity : AppCompatActivity() {
     }
 
     private fun eliminarUsuario() {
-        //TODO Falta por implementar el codigo para eliminar usuario, el problema es que se tiene
-        // que eliminar no solo al usuario, sino tambien sus tweets. Tambien se podría optar por un
-        // borrado lógico
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
