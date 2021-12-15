@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -92,9 +93,27 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private fun mostrarInfoUsuario() {
         binding.tvUsername.text = "@$username"
         binding.tvName.text = name
-        //TODO dado que el metodo buscarFotoUsuario no funciona todavía, esto tampoco debería ser llamado
-        // cargarFotoUsuario(buscarFotoUsuario(idUsuario))
+        cargarFotoUsuario(idUsuario)
         mostrarSeguidores(idUsuario)
+    }
+
+    private fun cargarFotoUsuario(idUsuario: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val img: String = service.getUsuario(token, idUsuario).fotoPerfil
+                //Si el usuario tiene una foto de perfil...
+                runOnUiThread {
+                    if(img != "") {
+                        println("toy aqui")
+                        Picasso.get().load(img).into(binding.imageviewUserPhotoNav)
+                    }
+                }
+            } catch (exception: Exception) {
+                println("Excepcion HOME_BUSCAR_FOTO_USUARIO:")
+                exception.printStackTrace()
+            }
+        }
     }
 
     private fun mostrarSeguidores(idUsuario: Int) {

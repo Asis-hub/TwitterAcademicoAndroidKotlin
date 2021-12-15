@@ -58,7 +58,8 @@ class UsuarioAdapter(
         }
 
         private fun mostrarFotoPerfil() {
-            if (usuario.fotoPerfil != "") {
+            println(usuario.fotoPerfil)
+            if (usuario.fotoPerfil != "" && usuario.fotoPerfil != null) {
                 cargarImagen(usuario.fotoPerfil)
             } else {
                 foto.setImageResource(R.drawable.default_photo)
@@ -66,11 +67,7 @@ class UsuarioAdapter(
         }
 
         private fun cargarImagen(imagen: String) {
-            if(imagen != "") {
-                Picasso.get().load(imagen).into(foto)
-            } else {
-                foto.setImageResource(R.drawable.default_photo)
-            }
+            Picasso.get().load(imagen).into(foto)
         }
     }
 
