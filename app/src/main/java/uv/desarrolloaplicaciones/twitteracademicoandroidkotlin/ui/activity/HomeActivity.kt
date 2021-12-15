@@ -75,7 +75,6 @@ class HomeActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
         idUsuario = sharedPreferences.getInt("id", 0)
         name = sharedPreferences.getString("nombre","name").toString()
-        println(name)
         username = sharedPreferences.getString("nombreUsuario","username").toString()
         token = sharedPreferences.getString("token","").toString()
     }
@@ -168,12 +167,9 @@ class HomeActivity : AppCompatActivity() {
     private fun mostrarInfoUsuario() {
         binding.tvUsername.text = "@$username"
         binding.tvName.text = name
-        //TODO dado que el metodo buscarFotoUsuario no funciona todavía, esto tampoco debería ser llamado
         cargarFotoUsuario(idUsuario)
         mostrarSeguidores(idUsuario)
     }
-    //TODO Este metodo no funciona todavía, falta saber como guardar y recuperar imagenes de
-    // base de datos usando la api
     private fun cargarFotoUsuario(idUsuario: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             try {

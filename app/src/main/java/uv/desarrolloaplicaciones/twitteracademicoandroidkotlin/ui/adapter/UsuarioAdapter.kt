@@ -68,6 +68,8 @@ class UsuarioAdapter(
         private fun cargarImagen(imagen: String) {
             if(imagen != "") {
                 Picasso.get().load(imagen).into(foto)
+            } else {
+                foto.setImageResource(R.drawable.default_photo)
             }
         }
     }
