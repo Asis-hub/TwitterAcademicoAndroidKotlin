@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -71,5 +72,8 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.4.0"
 
     implementation 'com.android.volley:volley:1.1.0'
+
+    //FIREBASE
+    implementation platform('com.google.firebase:firebase-bom:29.0.2')
 
 }
