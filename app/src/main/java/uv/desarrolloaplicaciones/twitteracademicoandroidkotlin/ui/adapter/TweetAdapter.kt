@@ -315,7 +315,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         }
 
         private fun cargarFotoPerfil() {
-            if (tweet.fotoPerfil == "") {
+            if (tweet.fotoPerfil != "") {
                 cargarImagen(foto ,tweet.fotoPerfil)
             } else {
                 foto.setImageResource(R.drawable.default_photo)
@@ -330,8 +330,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
 
         private fun cargarMultimediaTweet() {
             //Si el tweet no tiene ninguna imagen, hace el contenedor no visible
-            if (tweet.multimedia == "") {
-                println(tweet.multimedia)
+            if (tweet.multimedia != "") {
                 cargarImagen(multimedia ,tweet.multimedia)
             } else {
                 multimedia.visibility = View.INVISIBLE
