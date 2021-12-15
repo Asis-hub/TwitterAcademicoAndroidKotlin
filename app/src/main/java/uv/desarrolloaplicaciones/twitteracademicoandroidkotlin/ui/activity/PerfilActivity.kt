@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Visibility
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.JsonObject
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -240,7 +241,27 @@ class PerfilActivity : AppCompatActivity() {
         binding.tvName.text = nameOriginal
         initBotonSeguir(idUsuario, idUsuarioOriginal)
         llenarCampoPantallaPerfil()
+        cargarFotoUsuario(idUsuarioOriginal)
         mostrarSeguidores(idUsuarioOriginal)
+    }
+
+    private fun cargarFotoUsuario(idUsuario: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val img: String = service.getUsuario(token, idUsuario).fotoPerfil
+                //Si el usuario tiene una foto de perfil...
+                runOnUiThread {
+                    if(img != "") {
+                        println("toy aqui")
+                        Picasso.get().load(img).into(binding.ivUserPhotoNav)
+                    }
+                }
+            } catch (exception: Exception) {
+                println("Excepcion HOME_BUSCAR_FOTO_USUARIO:")
+                exception.printStackTrace()
+            }
+        }
     }
 
     private fun mostrarSeguidores(idUsuario: Int){

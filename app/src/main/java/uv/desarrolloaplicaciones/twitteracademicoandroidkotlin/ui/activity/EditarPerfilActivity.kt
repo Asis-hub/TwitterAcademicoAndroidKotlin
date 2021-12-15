@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.google.gson.JsonObject
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,6 +56,8 @@ class EditarPerfilActivity : AppCompatActivity() {
                 runOnUiThread {
                     infoUsuarioActual = response
                     if (response != null) {
+                        if (!response.fotoPerfil.isNullOrEmpty())
+                            Picasso.get().load(response.fotoPerfil).into(binding.ivSubirFoto)
                         binding.tfNombrePerfil.setText(response.nombre)
                         binding.tfNombreUsuario.setText(response.nombreUsuario)
                         binding.tfApellidoPaternoPerfil.setText(response.apellidoPaterno)

@@ -315,7 +315,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         }
 
         private fun cargarFotoPerfil() {
-            if (tweet.fotoPerfil != "") {
+            if (tweet.fotoPerfil != "" && tweet.fotoPerfil != null) {
                 cargarImagen(foto ,tweet.fotoPerfil)
             } else {
                 foto.setImageResource(R.drawable.default_photo)
