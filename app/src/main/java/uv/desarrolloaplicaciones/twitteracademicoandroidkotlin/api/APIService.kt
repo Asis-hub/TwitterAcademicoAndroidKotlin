@@ -20,13 +20,22 @@ interface APIService {
     @GET("Usuario")
     suspend fun getUsuarios(@Header("access-token") token: String) : List<Usuario>
 
+    @GET("Usuario/Content/{Keyword}")
+    suspend fun buscarUsuarioNombre(
+        @Header("access-token") token: String,
+        @Path("Keyword") keyword: String
+    ): List<Usuario>
+
     @Headers("Content-Type: application/json")
     @POST("Usuario")
     suspend fun registrarUsuario(@Body nuevoUsuario: RequestBody): Usuario
 
     @PUT("Usuario/{idUsuario}")
-    suspend fun modificarUsuario(@Header("access-token") token: String, @Path("idUsuario") idUsuario: Int,
-                                 @Body nuevaInfoUsuario: RequestBody): Usuario
+    suspend fun modificarUsuario(
+        @Header("access-token") token: String,
+        @Path("idUsuario") idUsuario: Int,
+        @Body nuevaInfoUsuario: RequestBody
+    ): Usuario
 
     @DELETE("Usuario/{idUsuario}")
     suspend fun eliminarUsuario(@Header("access-token") token: String,
@@ -75,7 +84,10 @@ interface APIService {
     suspend fun eliminarTweet(@Header("access-token") token: String, @Path("idTweet") idTweet: Int): Tweet
 
     @GET("Tweet/Content/{keyword}")
-    suspend fun buscarTweetContenido(@Header("access-token") token: String, @Path("keyword") keyword: String): List<Tweet>
+    suspend fun buscarTweetContenido(
+        @Header("access-token") token: String,
+        @Path("keyword") keyword: String
+    ): List<Tweet>
 
     @PUT("Tweet/{idTweet}")
     suspend fun modificarTweet(

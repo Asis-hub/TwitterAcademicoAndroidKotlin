@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_usuario"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_profile_photo"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        app:cardCornerRadius="100dp"
+        android:layout_gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/profile_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@drawable/egg" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="NAME"
+        android:textColor="?inverseColor"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_vertical"/>
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/tv_name"
+        android:text="\@name"
+        android:textColor="?inverseColorLite"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>
