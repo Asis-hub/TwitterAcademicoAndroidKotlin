@@ -77,6 +77,19 @@ interface APIService {
     @GET("Tweet/Content/{keyword}")
     suspend fun buscarTweetContenido(@Header("access-token") token: String, @Path("keyword") keyword: String): List<Tweet>
 
+    @PUT("Tweet/{idTweet}")
+    suspend fun modificarTweet(
+        @Header("access-token") token: String,
+        @Body tweetModificado: RequestBody,
+        @Path("idTweet") idTweet: Int
+    ): Tweet
+
+    @GET("TweetByID/{idTweet}")
+    suspend fun getTweet(
+        @Header("access-token") token: String,
+        @Path("idTweet") idTweet: Int
+    ): Tweet
+
     //LIKES
   
     @GET("Likes/{idTweet}/{idUsuario}")

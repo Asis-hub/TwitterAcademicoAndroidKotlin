@@ -24,6 +24,7 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.EditarTweetActivity
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.PerfilActivity
 
 class TweetAdapter(internal var context: Context, private var tweets: MutableList<Tweet>, private var idUsuario: Int) : androidx.recyclerview.widget.RecyclerView.Adapter<TweetAdapter.ViewHolder>() {
@@ -70,7 +71,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             this.tweet = tweet
 
             cargarLikes();
-            cargarListeners()
+            cargarListeners(tweet)
             //Menu que aparece al hace clic en el icono de los tres puntos
             cargarPopupMenu()
             cargarFotoPerfil()
@@ -102,7 +103,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             }
         }
 
-        private fun cargarListeners() {
+        private fun cargarListeners(tweet: Tweet) {
             foto.setOnClickListener{
                 val intent = Intent(context,PerfilActivity::class.java)
 
@@ -118,7 +119,9 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
             }
 
             editTweet.setOnClickListener {
-                //TODO Editar tweet
+                val intent = Intent(context, EditarTweetActivity::class.java)
+                sharedPreference.edit().putInt("idTweet", tweet.idTweet).apply()
+                startActivity(context, intent, null)
             }
 
             like.setOnClickListener{
