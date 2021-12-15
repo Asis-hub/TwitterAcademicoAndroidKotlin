@@ -11,6 +11,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.activity.PerfilActivity
@@ -56,18 +58,17 @@ class UsuarioAdapter(
         }
 
         private fun mostrarFotoPerfil() {
-            if (usuario.fotoPerfil != null) {
-                cargarImagen(foto, usuario.fotoPerfil!!)
+            if (usuario.fotoPerfil != "") {
+                cargarImagen(usuario.fotoPerfil)
             } else {
                 foto.setImageResource(R.drawable.default_photo)
             }
         }
 
-        private fun cargarImagen(view: ImageView, imagenBArray: ByteArray) {
-            view.setImageBitmap(
-                BitmapFactory.decodeByteArray(imagenBArray,
-                0,
-                imagenBArray!!.size))
+        private fun cargarImagen(imagen: String) {
+            if(imagen != "") {
+                Picasso.get().load(imagen).into(foto)
+            }
         }
     }
 

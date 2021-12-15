@@ -75,5 +75,8 @@ dependencies {
 
     //FIREBASE
     implementation platform('com.google.firebase:firebase-bom:29.0.2')
+    implementation 'com.google.firebase:firebase-storage-ktx'
 
+    //PICASSO
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

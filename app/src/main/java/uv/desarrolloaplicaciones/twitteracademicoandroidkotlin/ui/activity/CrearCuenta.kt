@@ -4,12 +4,17 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.drawable.toBitmap
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +30,8 @@ import java.util.*
 
 class CrearCuenta : AppCompatActivity() {
 
+    private lateinit var storage: FirebaseStorage
+
     private lateinit var binding: ActivityCrearCuentaBinding
     private var activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             result ->
@@ -38,6 +45,8 @@ class CrearCuenta : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCrearCuentaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        storage = Firebase.storage
 
         cargarListener()
     }
@@ -60,9 +69,12 @@ class CrearCuenta : AppCompatActivity() {
             var nombreUsuario = "nombreusuario"
             var password = "password"
             var idTipoUsuario = 1
-            //var fotoPerfil: Bitmap
+            var fotoPerfil: Bitmap
 
             if (camposTextoLlenados()) {
+                val storageRef = storage.reference
+                val rutaImagenesPerfil = storageRef.child("Imagenes/Perfil/"+System.currentTimeMillis()+".jpeg")
+
                 nombre = binding.etName.text.toString()
                 apellidoPaterno = binding.etAPaterno.text.toString()
                 apellidoMaterno = binding.etAMaterno.text.toString()
@@ -70,19 +82,33 @@ class CrearCuenta : AppCompatActivity() {
                 email = binding.etEmail.text.toString()
                 nombreUsuario = binding.etUsername.text.toString()
                 password = binding.etPassword.text.toString()
-                //fotoPerfil = binding.ivSubirFoto.drawable.toBitmap()
 
-                registrarUsuario(
-                    nombre,
-                    apellidoPaterno,
-                    apellidoMaterno,
-                    fechaNacimiento,
-                    email,
-                    nombreUsuario,
-                    password,
-                    idTipoUsuario,
-                    //fotoPerfil
-                )
+
+                binding.ivSubirFoto.isDrawingCacheEnabled = true
+                binding.ivSubirFoto.buildDrawingCache()
+                val bitmap = (binding.ivSubirFoto.drawable as BitmapDrawable).bitmap
+                val baos = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
+                val data = baos.toByteArray()
+
+                var uploadTask = rutaImagenesPerfil.putBytes(data)
+                uploadTask.addOnFailureListener {
+                    Toast.makeText(this, "No fue posible subir la imagen", Toast.LENGTH_SHORT).show()
+                }.addOnSuccessListener { taskSnapshot ->
+                    rutaImagenesPerfil.downloadUrl.addOnSuccessListener {
+                        registrarUsuario(
+                            nombre,
+                            apellidoPaterno,
+                            apellidoMaterno,
+                            fechaNacimiento,
+                            email,
+                            nombreUsuario,
+                            password,
+                            idTipoUsuario,
+                            it.toString()
+                        )
+                    }
+                }
             } else {
                 Toast.makeText(this, "Llena todos los campos de texto", Toast.LENGTH_SHORT).show()
             }
@@ -153,12 +179,14 @@ class CrearCuenta : AppCompatActivity() {
         nombreUsuario: String,
         password: String,
         idTipoUsuario: Int,
-        //fotoPerfil: Bitmap
+        fotoPerfil: String
     ) {
+
+        println(fotoPerfil)
 
         val json = JsonObject()
         json.addProperty("idUsuario", 0)
-        json.addProperty("FotoPerfil","")
+        json.addProperty("FotoPerfil", fotoPerfil)
         json.addProperty("Nombre", nombre)
         json.addProperty("ApellidoPaterno", apellidoPaterno)
         json.addProperty("ApellidoMaterno", apellidoMaterno)

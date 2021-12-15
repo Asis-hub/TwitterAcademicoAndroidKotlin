@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.gson.JsonObject
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,21 +44,33 @@ class CrearTweet : AppCompatActivity() {
         username = sharedPreferences.getString("nombreUsuario","username").toString()
         token = sharedPreferences.getString("token","").toString()
 
-        println("idUsuario = $idUsuario\n" +
-                "name = $name\n" +
-                "username = $username\n")
+        cargarFoto()
 
-        Glide.with(this)
-            .load("https://ibb.co/L6jFk1W")
-            .placeholder(R.drawable.ic_launcher_background)
-            .error(R.drawable.default_photo)
-            .into(binding.imgUserphoto)
         binding.btnTwittear.setOnClickListener{
             revisarTamañoTweet()
         }
         val close = findViewById<View>(R.id.toolbar)
         close.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun cargarFoto() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val img: String = service.getUsuario(token, idUsuario).fotoPerfil
+                //Si el usuario tiene una foto de perfil...
+                runOnUiThread {
+                    if(img != "") {
+                        println("toy aqui")
+                        Picasso.get().load(img).into(binding.imgUserphoto)
+                    }
+                }
+            } catch (exception: Exception) {
+                println("Excepcion CREAR_TWEET_BUSCAR_FOTO_USUARIO:")
+                exception.printStackTrace()
+            }
         }
     }
 

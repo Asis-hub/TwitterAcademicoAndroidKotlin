@@ -6,7 +6,7 @@ data class Usuario(
     @SerializedName("idUsuario")
     var idUsuario: Int,
     @SerializedName("FotoPerfil")
-    var fotoPerfil: ByteArray?,
+    var fotoPerfil: String,
     @SerializedName("Nombre")
     var nombre: String,
     @SerializedName("ApellidoPaterno")

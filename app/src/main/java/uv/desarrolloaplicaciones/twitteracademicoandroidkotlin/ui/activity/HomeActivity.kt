@@ -13,7 +13,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -167,35 +169,28 @@ class HomeActivity : AppCompatActivity() {
         binding.tvUsername.text = "@$username"
         binding.tvName.text = name
         //TODO dado que el metodo buscarFotoUsuario no funciona todavía, esto tampoco debería ser llamado
-        // cargarFotoUsuario(buscarFotoUsuario(idUsuario))
+        cargarFotoUsuario(idUsuario)
         mostrarSeguidores(idUsuario)
     }
     //TODO Este metodo no funciona todavía, falta saber como guardar y recuperar imagenes de
     // base de datos usando la api
-    private fun buscarFotoUsuario(idUsuario: Int): Bitmap? {
-        var fotoUsuario: Bitmap? = null
-
+    private fun cargarFotoUsuario(idUsuario: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                //val img: ByteArray? = service.getUsuario(idUsuario).fotoPerfil
+                val img: String = service.getUsuario(token, idUsuario).fotoPerfil
                 //Si el usuario tiene una foto de perfil...
-                //if(img != null) {
-                  //  fotoUsuario = BitmapFactory.decodeByteArray(img,0,img.size)
-                //}
+                runOnUiThread {
+                    if(img != "") {
+                        println("toy aqui")
+                        Picasso.get().load(img).into(binding.imageviewUserPhotoNav)
+                        Picasso.get().load(img).into(binding.imageviewUserPhoto)
+                    }
+                }
             } catch (exception: Exception) {
                 println("Excepcion HOME_BUSCAR_FOTO_USUARIO:")
                 exception.printStackTrace()
             }
-        }
-
-        return fotoUsuario
-    }
-
-    private fun cargarFotoUsuario(fotoUsuario: Bitmap?) {
-        if (fotoUsuario != null) {
-            binding.imageviewUserPhoto.setImageBitmap(fotoUsuario)
-            binding.imageviewUserPhotoNav.setImageBitmap(fotoUsuario)
         }
     }
 
