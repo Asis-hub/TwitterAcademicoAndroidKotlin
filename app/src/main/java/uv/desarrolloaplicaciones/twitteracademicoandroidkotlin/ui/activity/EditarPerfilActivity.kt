@@ -5,12 +5,19 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -23,9 +30,11 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.databinding.ActivityEditarPerfilBinding
+import java.io.ByteArrayOutputStream
 import java.sql.Date
 
 class EditarPerfilActivity : AppCompatActivity() {
+    private lateinit var storage: FirebaseStorage
     private var idUsuario: Int = 0
     private lateinit var binding: ActivityEditarPerfilBinding
     private lateinit var infoUsuarioActual: Usuario
@@ -42,7 +51,7 @@ class EditarPerfilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditarPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        storage = Firebase.storage
         recuperarDatosUsuario()
         mostrarDatosUsuario()
         cargarListeners()
@@ -90,15 +99,53 @@ class EditarPerfilActivity : AppCompatActivity() {
         }
 
         binding.btnGuardarEditarPerfil.setOnClickListener {
-            editarPerfil()
+            try {
+                if (!tieneFotoDefault()) {
+                    println("no tiene foto default")
+                    val storageRef = storage.reference
+                    val rutaImagenesPerfil = storageRef.child("Imagenes/Perfil/"+System.currentTimeMillis()+".jpeg")
+
+
+                    binding.ivSubirFoto.isDrawingCacheEnabled = true
+                    binding.ivSubirFoto.buildDrawingCache()
+                    val bitmap = (binding.ivSubirFoto.drawable as BitmapDrawable).bitmap
+                    val baos = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
+                    val data = baos.toByteArray()
+
+                    var uploadTask = rutaImagenesPerfil.putBytes(data)
+                    uploadTask.addOnFailureListener {
+                        it.printStackTrace()
+                        Toast.makeText(this, "No fue posible subir la imagen", Toast.LENGTH_SHORT).show()
+                    }.addOnSuccessListener { taskSnapshot ->
+                        rutaImagenesPerfil.downloadUrl.addOnSuccessListener {
+                            editarPerfil(it.toString())
+                        }
+                    }
+                } else {
+                    editarPerfil("")
+                }
+            } catch (excepcion: Exception) {
+                println("Excepcion EDITAR_PERFIL_OBTENER_IMAGEN:")
+                excepcion.printStackTrace()
+            }
         }
 
         binding.btnEliminar.setOnClickListener {
             confirmacionEliminarUsuario()
         }
+
+        binding.btnBorrarFoto.setOnClickListener {
+            borrarImagenUsuario()
+        }
+    }
+
+    private fun borrarImagenUsuario() {
+        binding.ivSubirFoto.setImageResource(R.drawable.default_photo)
     }
 
     private fun seleccionarImagen() {
+        println(tieneFotoDefault())
         var intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         activityResultLauncher.launch(intent)
     }
@@ -163,12 +210,12 @@ class EditarPerfilActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun editarPerfil() {
+    private fun editarPerfil(imagen: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val json = JsonObject()
                 json.addProperty("idUsuario", idUsuario)
-                json.addProperty("FotoPerfil","")
+                json.addProperty("FotoPerfil", imagen)
                 json.addProperty("Nombre", binding.tfNombrePerfil.text.toString())
                 json.addProperty("ApellidoPaterno", binding.tfApellidoPaternoPerfil.text.toString())
                 json.addProperty("ApellidoMaterno", binding.tfApellidoMaternoPerfil.text.toString())
@@ -209,6 +256,12 @@ class EditarPerfilActivity : AppCompatActivity() {
                 mostrarMensaje(resources.getString(R.string.mensajeError))
             }
         }
+    }
+
+    private fun tieneFotoDefault(): Boolean {
+        return binding.ivSubirFoto.drawable.toBitmap().sameAs(
+            ResourcesCompat.getDrawable(resources, R.drawable.default_photo,null)!!.toBitmap()
+        )
     }
 
     private fun recuperarDatosUsuario() {
