@@ -10,7 +10,7 @@ data class Tweet (
     @SerializedName("FechaHoraPublicacion")
     var fechaHoraPublicacion: String,
     @SerializedName("Multimedia")
-    var multimedia: ByteArray,
+    var multimedia: String,
     @SerializedName("Likes")
     var likes: Int,
     @SerializedName("idUsuario")
@@ -20,7 +20,7 @@ data class Tweet (
     @SerializedName("NombreUsuario")
     var nombreUsuario: String,
     @SerializedName("FotoPerfil")
-    var fotoPerfil: ByteArray,
+    var fotoPerfil: String,
     @SerializedName("Respuesta")
     var respuesta: String
 )

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "225961097305",
+    "project_id": "twitteracademicoandroidkotlin",
+    "storage_bucket": "twitteracademicoandroidkotlin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225961097305:android:c261869bf48c22e5d0d948",
+        "android_client_info": {
+          "package_name": "uv.desarrolloaplicaciones.twitteracademicoandroidkotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225961097305-a6qeecp72c9umn7ncab0d3j58ct87fui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB1dgkzaNf01CfIR6vDKwWp3bNOMqhlpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225961097305-a6qeecp72c9umn7ncab0d3j58ct87fui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

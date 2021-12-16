@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -17,21 +18,26 @@ import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.databinding.ActivityBusquedaBinding
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.databinding.ActivityHomeBinding
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter.TweetAdapter
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter.UsuarioAdapter
 import java.util.*
 
 class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+    private lateinit var binding: ActivityBusquedaBinding
 
     private lateinit var username: String
     private var idUsuario: Int = 0
     private lateinit var name: String
     private lateinit var token: String
 
-    private lateinit var binding: ActivityBusquedaBinding
     private lateinit var tweetsAdapter: TweetAdapter
     private val tweets = mutableListOf<Tweet>()
+
+    private lateinit var usuariosAdapter: UsuarioAdapter
+    private val usuarios = mutableListOf<Usuario>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +71,7 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         binding.tweetsRefreshLayout.setOnRefreshListener {
             tweetsAdapter.actualizarTweets()
+            usuariosAdapter.actualizarUsuarios()
         }
 
         binding.navLogout.setOnClickListener {
@@ -86,9 +93,27 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private fun mostrarInfoUsuario() {
         binding.tvUsername.text = "@$username"
         binding.tvName.text = name
-        //TODO dado que el metodo buscarFotoUsuario no funciona todavía, esto tampoco debería ser llamado
-        // cargarFotoUsuario(buscarFotoUsuario(idUsuario))
+        cargarFotoUsuario(idUsuario)
         mostrarSeguidores(idUsuario)
+    }
+
+    private fun cargarFotoUsuario(idUsuario: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val service = ServiceBuilder.buildService(APIService::class.java)
+                val img: String = service.getUsuario(token, idUsuario).fotoPerfil
+                //Si el usuario tiene una foto de perfil...
+                runOnUiThread {
+                    if(img != "") {
+                        println("toy aqui")
+                        Picasso.get().load(img).into(binding.imageviewUserPhotoNav)
+                    }
+                }
+            } catch (exception: Exception) {
+                println("Excepcion HOME_BUSCAR_FOTO_USUARIO:")
+                exception.printStackTrace()
+            }
+        }
     }
 
     private fun mostrarSeguidores(idUsuario: Int) {
@@ -118,32 +143,55 @@ class BusquedaActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun initRecyclerView() {
         tweetsAdapter = TweetAdapter(this, tweets,idUsuario)
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
-        binding.recyclerviewBusqueda.layoutManager = layoutManager
+
+        val layoutManagerTweet = LinearLayoutManager(this)
+        layoutManagerTweet.orientation = LinearLayoutManager.VERTICAL
+        binding.recyclerviewBusqueda.layoutManager = layoutManagerTweet
         binding.recyclerviewBusqueda.adapter = tweetsAdapter
+
+        usuariosAdapter = UsuarioAdapter(this, usuarios)
+
+        val layoutManagerUsuario = LinearLayoutManager(this)
+        layoutManagerUsuario.orientation = LinearLayoutManager.VERTICAL
+        binding.recyclerviewBusquedaUsuario.layoutManager = layoutManagerUsuario
+        binding.recyclerviewBusquedaUsuario.adapter = usuariosAdapter
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if(!query.isNullOrEmpty()) {
-            buscarTweets(query.lowercase(Locale.getDefault()))
+            buscar(query.lowercase(Locale.getDefault()))
         }
         return true
     }
 
-    private fun buscarTweets(query: String) {
+    private fun buscar(query: String) {
+        usuarios.clear()
+        tweets.clear()
+        tweetsAdapter.actualizarTweets()
+        usuariosAdapter.actualizarUsuarios()
+        binding.tvMsgResultado.text = ""
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.buscarTweetContenido(token, query)
+                val responseTweet = service.buscarTweetContenido(token, query)
+                val responseUsuario = service.buscarUsuarioNombre(token, query)
 
                 runOnUiThread {
-                    if(response.isNotEmpty()) {
-                        tweets.clear()
-                        tweets.addAll(response)
-                        tweetsAdapter.actualizarTweets(tweets)
-                    } else {
-                        mostrarMensaje("¡No hay tweets con este contenido!")
+                    when {
+                        responseTweet.isNotEmpty() -> {
+                            tweets.clear()
+                            tweets.addAll(responseTweet)
+                            tweetsAdapter.actualizarTweets(tweets)
+                        }
+                        responseUsuario.isNotEmpty() -> {
+                            usuarios.clear()
+                            usuarios.addAll(responseUsuario)
+                            usuariosAdapter.actualizarUsuarios(usuarios)
+                        }
+                        else -> {
+                            //mostrarMensaje("¡No se encontraron tweets o usuarios!")
+                            binding.tvMsgResultado.text = "¡No se encontraron tweets o usuarios!"
+                        }
                     }
                 }
             } catch (exception: Exception) {

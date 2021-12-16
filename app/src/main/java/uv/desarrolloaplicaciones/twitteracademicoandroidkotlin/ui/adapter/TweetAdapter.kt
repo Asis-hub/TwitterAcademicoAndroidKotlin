@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import com.squareup.picasso.Picasso
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.R
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
@@ -314,8 +315,8 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
         }
 
         private fun cargarFotoPerfil() {
-            if (tweet.fotoPerfil != null) {
-                cargarImagen(foto, tweet.fotoPerfil)
+            if (tweet.fotoPerfil != "" && tweet.fotoPerfil != null) {
+                cargarImagen(foto ,tweet.fotoPerfil)
             } else {
                 foto.setImageResource(R.drawable.default_photo)
             }
@@ -329,18 +330,16 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
 
         private fun cargarMultimediaTweet() {
             //Si el tweet no tiene ninguna imagen, hace el contenedor no visible
-            if (tweet.multimedia != null) {
-                cargarImagen(multimedia, tweet.multimedia)
+            if (tweet.multimedia != "" || tweet.multimedia != null) {
+                cargarImagen(multimedia ,tweet.multimedia)
             } else {
                 multimedia.visibility = View.INVISIBLE
                 multimedia.setImageBitmap(null)
             }
         }
 
-        private fun cargarImagen(view: ImageView, imagenBArray: ByteArray) {
-            view.setImageBitmap(BitmapFactory.decodeByteArray(imagenBArray,
-                0,
-                imagenBArray!!.size))
+        private fun cargarImagen(view: ImageView, imagen: String) {
+            Picasso.get().load(imagen).into(view)
         }
     }
 

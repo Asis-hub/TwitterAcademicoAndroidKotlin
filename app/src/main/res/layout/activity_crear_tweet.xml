@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.CrearTweet">
@@ -30,9 +31,11 @@
 
 
     <RelativeLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
+        android:gravity="center|top"
         android:padding="15dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
@@ -54,5 +57,37 @@
             android:hint="¿Que esta pasando?"
             android:singleLine="false"
             android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/ivSeleccionada"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_alignBottom="@id/img_userphoto"
+            android:layout_marginLeft="40dp"
+            android:layout_marginBottom="-340dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/botoneslayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/mainLayout"
+        android:layout_marginBottom="20dp"
+        android:gravity="center|left">
+
+        <ImageView
+            android:id="@+id/ivAgregarImagen"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_baseline_image_24" />
+
+        <ImageView
+            android:id="@+id/ivEliminarImagen"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@id/ivAgregarImagen"
+            android:src="@drawable/ic_delete" />
     </RelativeLayout>
 </RelativeLayout>
