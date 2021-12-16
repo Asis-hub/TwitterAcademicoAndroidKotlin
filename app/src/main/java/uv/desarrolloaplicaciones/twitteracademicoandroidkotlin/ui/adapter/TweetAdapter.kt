@@ -330,7 +330,7 @@ class TweetAdapter(internal var context: Context, private var tweets: MutableLis
 
         private fun cargarMultimediaTweet() {
             //Si el tweet no tiene ninguna imagen, hace el contenedor no visible
-            if (tweet.multimedia != "") {
+            if (tweet.multimedia != "" || tweet.multimedia != null) {
                 cargarImagen(multimedia ,tweet.multimedia)
             } else {
                 multimedia.visibility = View.INVISIBLE
