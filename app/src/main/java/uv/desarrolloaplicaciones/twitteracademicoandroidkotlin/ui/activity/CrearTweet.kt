@@ -135,13 +135,13 @@ class CrearTweet : AppCompatActivity() {
                         }
                     }
                 }else{
-                    crearTweet(cuerpo, fechaPublicacion, "")
+                    crearTweet(cuerpo, fechaPublicacion, null)
                 }
             }
         }
     }
 
-    private fun crearTweet(cuerpo: String, fechaPublicacion: String, picture: String) {
+    private fun crearTweet(cuerpo: String, fechaPublicacion: String, picture: String?) {
         val json = JsonObject()
 
         json.addProperty("Cuerpo", cuerpo)
