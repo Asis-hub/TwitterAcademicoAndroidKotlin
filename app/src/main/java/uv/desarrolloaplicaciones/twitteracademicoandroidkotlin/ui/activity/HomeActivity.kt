@@ -22,12 +22,14 @@ import kotlinx.coroutines.launch
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.APIService
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.ServiceBuilder
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Tweet
+import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.api.datamodels.Usuario
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.databinding.ActivityHomeBinding
 import uv.desarrolloaplicaciones.twitteracademicoandroidkotlin.ui.adapter.TweetAdapter
 
 class HomeActivity : AppCompatActivity() {
 
     private var idUsuario = 0
+    private var idTipoUsuario = 0
     private lateinit var token: String
     private lateinit var name: String
     private lateinit var username: String
@@ -77,6 +79,7 @@ class HomeActivity : AppCompatActivity() {
         name = sharedPreferences.getString("nombre","name").toString()
         username = sharedPreferences.getString("nombreUsuario","username").toString()
         token = sharedPreferences.getString("token","").toString()
+        idUsuario = sharedPreferences.getInt("tipoUsuario", 0)
     }
 
     private fun mostrarSeguidores(idUsuario: Int){
@@ -195,7 +198,12 @@ class HomeActivity : AppCompatActivity() {
             try {
                 binding.tweetsRefreshLayout.isRefreshing = false
                 val service = ServiceBuilder.buildService(APIService::class.java)
-                val response = service.recuperarTweets(token, idUsuario)
+                var response: List<Tweet> = emptyList()
+                if(idTipoUsuario == 1){
+                    response = service.recuperarTweets(token, idUsuario)
+                }else{
+                    response = service.recuperarTweets(token)
+                }
                 runOnUiThread {
                     if(response.isNotEmpty()) {
                         tweets.clear()
